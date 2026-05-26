@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GroupOmz | Güneş Gölge Kontrol Sistemleri</title>
+    <link rel="icon" type="image/x-icon" href="images/ZaferLogo2.ico">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome (İkonlar için) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #ffffff; overflow-x: hidden; color: #1a1a1a; opacity: 0; transition: opacity 1s ease-in; }
+        body.loaded { opacity: 1; }
+        .glass { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px); }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #223B51; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #f97316; }
+
+        /* Text Selection */
+        ::selection { background: #f97316; color: white; }
+
+        /* Premium Glow Effect for Service Cards */
+        .service-card::after {
+            content: ''; position: absolute; inset: 0; border-radius: 24px;
+            box-shadow: 0 0 30px rgba(249, 115, 22, 0); transition: box-shadow 0.6s ease; pointer-events: none;
+        }
+        .service-card:hover::after { box-shadow: 0 10px 40px rgba(249, 115, 22, 0.15); }
+
+        .mobile-menu { 
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background-color: #223B51 !important;
+            display: flex;
+            flex-direction: column;
+            padding: 2.5rem;
+            transform: translateX(100%);
+            transition: all 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+            visibility: hidden;
+            opacity: 0;
+        }
+        .mobile-menu.active { 
+            transform: translateX(0);
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Navbar active state fix for mobile rendering */
+        #navbar.menu-active {
+            background: transparent !important;
+            backdrop-filter: none !important;
+            border-color: transparent !important;
+        }
+        
+        .mobile-link {
+            opacity: 0;
+            transform: translateX(30px);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .mobile-menu.active .mobile-link {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .text-huge { font-size: clamp(3rem, 10vw, 6rem); line-height: 0.95; letter-spacing: -0.05em; font-weight: 800; }
+
+        /* Responsive Section Spacing */
+        section { padding-top: 5rem; padding-bottom: 5rem; }
+        @media (min-width: 768px) {
+            section { padding-top: 8rem; padding-bottom: 8rem; }
+        }
+
+        /* Groupomz Modern Service Card Design */
+        .service-card {
+            background: #fff;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            position: relative;
+            cursor: pointer;
+            transform-style: preserve-3d;
+        }
+        .service-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+        }
+        .card-image-container {
+            position: relative;
+            overflow: hidden;
+            height: 400px;
+        }
+        .card-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+        .service-card:hover .card-image-container img {
+            transform: scale(1.1);
+        }
+        .card-overlay-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 24px;
+            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            color: #ffffff;
+        }
+        .icon-box {
+            background-color: #f97316;
+            color: #fff;
+            width: 46px;
+            height: 46px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+        }
+        .service-card:hover .icon-box {
+            background-color: #ffffff;
+            color: #f97316;
+            transform: rotate(360deg);
+        }
+        .card-description {
+            padding: 24px;
+            color: #223B51;
+            font-size: 14px;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        /* Bento Grid Animation Classes */
+        .parallax-el { transition: transform 0.1s ease-out; }
+        .dots-pattern { background-image: radial-gradient(#f97316 1px, transparent 1px); background-size: 12px 12px; }
+        .bento-reveal { opacity: 0; transform: translateY(50px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .bento-reveal.show { opacity: 1; transform: translateY(0); }
+        .bento-card { background-color: #ffffff; border-radius: 2.5rem; overflow: hidden; height: 100%; transition: transform 0.4s ease; }
+        
+        @media (hover: hover) {
+            .bento-card:hover { transform: scale(1.01); }
+        }
+        @media (max-width: 768px) {
+            .bento-card { border-radius: 1.5rem; }
+        }
+
+        /* Hero Text Shadow Effect */
+        #home .max-w-3xl h1, #home .max-w-3xl p {
+            transition: text-shadow 0.5s ease;
+        }
+        #home .max-w-3xl:hover h1 {
+            text-shadow: 0 0 25px rgba(249, 115, 22, 0.6);
+        }
+        #home .max-w-3xl:hover p {
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+        .modal-content {
+            transform: scale(0.9);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        /* Crocist Sistem Özellikleri Styles */
+        .features-grid-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px 30px;
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        .feature-card {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .feature-icon-container {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #f97316;
+            margin-bottom: 20px;
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .feature-icon-container svg {
+            width: 42px;
+            height: 42px;
+            stroke-width: 1.5;
+        }
+        .feature-card:hover .feature-icon-container {
+            background-color: #f97316;
+            color: #fff;
+            transform: translateY(-5px) rotate(5deg);
+            box-shadow: 0 10px 30px rgba(249, 115, 22, 0.2);
+        }
+        .icon-flip { transform: scaleX(-1); }
+        .feature-card h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 15px;
+            letter-spacing: -0.5px;
+        }
+        .feature-card p {
+            font-size: 14px;
+            color: #cbd5e1;
+            text-align: left;
+            font-weight: 400;
+        }
+        @media (max-width: 1024px) {
+            .features-grid-container { grid-template-columns: repeat(2, 1fr); gap: 40px; }
+        }
+        @media (max-width: 600px) {
+            .features-grid-container { grid-template-columns: 1fr; gap: 35px; }
+        }
+
+        /* Scroll Down Animation */
+        @keyframes mouse-scroll {
+            0% { transform: translateY(0); opacity: 0; }
+            20% { opacity: 1; }
+            80% { transform: translateY(12px); opacity: 0; }
+            100% { opacity: 0; }
+        }
+        .mouse-icon {
+            width: 22px;
+            height: 38px;
+            border: 2px solid rgba(255,255,255,0.4);
+            border-radius: 12px;
+            position: relative;
+        }
+        .mouse-wheel {
+            width: 2px;
+            height: 6px;
+            background: #f97316;
+            position: absolute;
+            left: 50%;
+            margin-left: -1px;
+            top: 8px;
+            border-radius: 1px;
+            animation: mouse-scroll 2s infinite;
+        }
+
+        /* Navbar Link Hover Effect */
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #f97316;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* WhatsApp Floating Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .whatsapp-float:hover { transform: scale(1.1) rotate(5deg); }
+    </style>
+</head>
+<body class="bg-white">
+    <!-- Navigasyon -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 border-b border-transparent text-white">
+        <div class="max-w-[1600px] mx-auto px-6 lg:px-12">
+            <div id="navbar-container" class="flex justify-between h-22 items-center transition-all duration-300">
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="#home" class="flex items-center">
+                        <img id="navbar-logo" src="images/Logo.png" alt="GROUPOMZ Logo" class="h-20 w-auto transition-all duration-300">
+                    </a>
+                </div>
+                <!-- Desktop Menü -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-6">
+                        <a href="#home" class="nav-link text-[13px] font-bold uppercase tracking-[0.3em] hover:text-orange-500 transition">Ana Sayfa</a>
+                        <a href="#services" class="nav-link text-[13px] font-bold uppercase tracking-[0.3em] hover:text-orange-500 transition">Hizmetler</a>
+                        <a href="#free-discovery" class="nav-link text-[13px] font-bold uppercase tracking-[0.3em] hover:text-orange-500 transition">Ücretsiz Keşif</a>
+                        <a href="tel:+905397724528" class="nav-link text-[13px] font-bold tracking-widest hover:text-orange-500 transition ml-4"><i class="fas fa-phone-alt mr-2 text-[9px]"></i>+90 539 772 45 28</a>
+                        <a href="#contact" class="bg-[#223B51] text-white px-6 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-orange-500 hover:text-white transition-all transform hover:-translate-y-1 shadow-lg hover:shadow-orange-500/20 flex items-center group">Bize Ulaşın <i class="fas fa-arrow-right ml-2 text-[8px] group-hover:translate-x-1 transition-transform"></i></a>
+                    </div>
+                </div>
+                <!-- Mobil Menü Butonu -->
+                <div class="-mr-2 flex md:hidden relative z-[110]">
+                    <button id="mobile-menu-button" type="button" class="inline-flex items-center justify-center p-2 rounded-md focus:outline-none" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Menüyü aç</span>
+                        <i id="mobile-icon" class="fas fa-ellipsis-v h-6 w-6 text-white transition-all duration-300 text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobil Menü İçeriği -->
+        <div class="mobile-menu" id="mobile-menu">
+            <div class="mb-16">
+                <img src="images/Logo.png" alt="Groupomz Logo" class="h-12 w-auto">
+            </div>
+            <nav class="flex flex-col space-y-8">
+                <a href="#home" class="mobile-link text-4xl font-extrabold text-white tracking-tighter" style="transition-delay: 0.1s;">Ana Sayfa</a>
+                <a href="#services" class="mobile-link text-4xl font-extrabold text-white tracking-tighter" style="transition-delay: 0.2s;">Hizmetler</a>
+                <a href="#free-discovery" class="mobile-link text-4xl font-extrabold text-white tracking-tighter" style="transition-delay: 0.3s;">Ücretsiz Keşif</a>
+                <a href="tel:+905397724528" class="mobile-link text-xl font-bold text-orange-500 tracking-wider" style="transition-delay: 0.4s;">
+                    <i class="fas fa-phone-alt mr-2 text-sm"></i>+90 539 772 45 28
+                </a>
+                <div class="pt-4">
+                    <a href="#contact" class="mobile-link inline-block bg-white text-[#223B51] px-10 py-5 rounded-full text-[11px] font-bold uppercase tracking-widest text-center" style="transition-delay: 0.5s;">Bize Ulaşın</a>
+                </div>
+            </nav>
+            <div class="mt-auto mobile-link" style="transition-delay: 0.6s;">
+                <div class="h-px w-full bg-white/10 mb-8"></div>
+                <p class="text-white/40 text-[10px] font-bold uppercase tracking-[0.4em] mb-6">Sosyal Medya</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-white hover:bg-orange-500 transition-all"><i class="fab fa-instagram text-xl"></i></a>
+                    <a href="#" class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-white hover:bg-[#1877F2] transition-all"><i class="fab fa-facebook-f text-xl"></i></a>
+                    <a href="#" class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-white hover:bg-[#FF0000] transition-all"><i class="fab fa-youtube text-xl"></i></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section (Slider) -->
+    <section id="home" class="relative w-full h-screen overflow-hidden">
+        <div class="absolute inset-0 flex transition-transform duration-700 ease-in-out" id="slider-container">
+
+
+            <div class="w-full flex-shrink-0 relative bg-cover bg-center" style="background-image: url('images/CamBalkon1.png');">
+                <div class="absolute inset-0 bg-black/60 flex items-center justify-center text-center p-4">
+                    <div class="max-w-3xl" data-aos="fade-up" data-aos-duration="1000">
+                        <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight">Giyotin Cam Balkon</h1>
+                        <div class="w-60 h-1 bg-orange-500 mx-auto mb-6"></div>
+                        <p class="text-lg md:text-xl text-white/90 font-medium">Dikey açılıp kapanabilen motorlu yapısıyla tek tuşla balkonunuzu şık bir oda konforuna dönüştürür.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full flex-shrink-0 relative bg-cover bg-center" style="background-image: url('images/Kaset1.png');">
+                <div class="absolute inset-0 bg-black/60 flex items-center justify-center text-center p-4">
+                    <div class="max-w-3xl" data-aos="fade-up" data-aos-duration="1000">
+                        <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight">Kasetli Tente</h1>
+                        <div class="w-60 h-1 bg-orange-500 mx-auto mb-6"></div>
+                        <p class="text-lg md:text-xl text-white/90 font-medium">Kapalı kaset sistemi sayesinde mekanizmayı koruyan uzun ömürlü ve estetik gölgelendirmedir.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full flex-shrink-0 relative bg-cover bg-center" style="background-image: url('images/Elektronik1.png');">
+                <div class="absolute inset-0 bg-black/60 flex items-center justify-center text-center p-4">
+                    <div class="max-w-3xl" data-aos="fade-up" data-aos-duration="1000">
+                        <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight">Elektronik Dekorasyon Sistemleri</h1>
+                        <div class="w-60 h-1 bg-orange-500 mx-auto mb-6"></div>
+                        <p class="text-lg md:text-xl text-white/90 font-medium">Yaşam alanlarına konfor ve teknoloji katmak için tasarlanmış akıllı otomasyon çözümleridir.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full flex-shrink-0 relative bg-cover bg-center" style="background-image: url('images/Kapi1.png');">
+                <div class="absolute inset-0 bg-black/60 flex items-center justify-center text-center p-4">
+                    <div class="max-w-3xl" data-aos="fade-up" data-aos-duration="1000">
+                        <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight">Otomatik Kapı Sistemleri</h1>
+                        <div class="w-60 h-1 bg-orange-500 mx-auto mb-6"></div>
+                        <p class="text-lg md:text-xl text-white/90 font-medium">Yoğun geçişli alanlarda güvenliği ve geçiş kolaylığını en üst düzeye çıkaran akıllı girişlerdir.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="w-full flex-shrink-0 relative bg-cover bg-center" style="background-image: url('images/Zip1.png');">
+                <div class="absolute inset-0 bg-black/60 flex items-center justify-center text-center p-4">
+                    <div class="max-w-3xl" data-aos="fade-up" data-aos-duration="1000">
+                        <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight">Zip Perde Sistemleri</h1>
+                        <div class="w-60 h-1 bg-orange-500 mx-auto mb-6"></div>
+                        <p class="text-lg md:text-xl text-white/90 font-medium">Özel fermuarlı yapısıyla dış mekanlarda dört mevsim izole bir konfor alanı yaratır.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full flex-shrink-0 relative bg-cover bg-center" style="background-image: url('images/Tavan1.png');">
+                <div class="absolute inset-0 bg-black/60 flex items-center justify-center text-center p-4">
+                    <div class="max-w-3xl" data-aos="fade-up" data-aos-duration="1000">
+                        <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight">Tavan Perde Sistemleri</h1>
+                        <div class="w-60 h-1 bg-orange-500 mx-auto mb-6"></div>
+                        <p class="text-lg md:text-xl text-white/90 font-medium">Cam tavan ve kış bahçelerinde güneş ışığını ve sıcaklığı kontrol eden estetik sistemlerdir.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full flex-shrink-0 relative bg-cover bg-center" style="background-image: url('images/Panjur1.png');">
+                <div class="absolute inset-0 bg-black/60 flex items-center justify-center text-center p-4">
+                    <div class="max-w-3xl" data-aos="fade-up" data-aos-duration="1000">
+                        <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight">Panjur Sistemleri</h1>
+                        <div class="w-60 h-1 bg-orange-500 mx-auto mb-6"></div>
+                        <p class="text-lg md:text-xl text-white/90 font-medium">Yaşam alanlarında üstün güvenlik, gizlilik ve ısı-ses yalıtımı sağlayan koruyucu sistemdir.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="w-full flex-shrink-0 relative bg-cover bg-center" style="background-image: url('images/Wintent1.png');">
+                <div class="absolute inset-0 bg-black/60 flex items-center justify-center text-center p-4">
+                    <div class="max-w-3xl" data-aos="fade-up" data-aos-duration="1000">
+                        <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight">Wintent Tente </h1>
+                        <div class="w-60 h-1 bg-orange-500 mx-auto mb-6"></div>
+                        <p class="text-lg md:text-xl text-white/90 font-medium">Pencerelere ve vitrinlere şıklık katan, geniş hareket kabiliyetine sahip estetik gölgelendirmedir.</p>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <!-- Slider Navigation Arrows -->
+        <button id="prev-slide" class="hidden md:flex absolute top-1/2 left-8 -translate-y-1/2 w-14 h-14 bg-white/10 hover:bg-orange-500 backdrop-blur-md border border-white/20 text-white rounded-2xl z-10 transition-all duration-500 items-center justify-center hover:scale-110">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button id="next-slide" class="hidden md:flex absolute top-1/2 right-8 -translate-y-1/2 w-14 h-14 bg-white/10 hover:bg-orange-500 backdrop-blur-md border border-white/20 text-white rounded-2xl z-10 transition-all duration-500 items-center justify-center hover:scale-110">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+
+        <!-- Slider Pagination Dots -->
+        <div id="slider-pagination" class="absolute bottom-24 left-12 z-20 flex space-x-3">
+            <!-- JS ile doldurulacak -->
+        </div>
+
+        <!-- Scroll Down Indicator -->
+        <div id="scroll-indicator" class="hidden md:flex absolute bottom-24 right-12 z-20 items-center space-x-4 pointer-events-none transition-opacity duration-500" data-aos="fade-left" data-aos-delay="1200">
+            <div class="text-right">
+                <span class="text-white/40 text-[9px] font-bold uppercase tracking-[0.4em] block italic">Bölüm 01</span>
+                <span class="text-white text-[10px] font-bold uppercase tracking-[0.2em] block">Hizmetler</span>
+            </div>
+            <div class="mouse-icon">
+                <div class="mouse-wheel"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hizmetler Section (Eski Portfolyo) -->
+    <!-- Hizmetler Section -->
+    <section id="services" class="pt-12 pb-24 bg-white text-gray-900 relative overflow-hidden z-0">
+        <!-- Decorative Background Elements -->
+        <div class="absolute top-0 left-0 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+        <div class="absolute bottom-0 right-0 w-80 h-80 bg-[#223B51]/5 rounded-full blur-3xl translate-x-1/2 translate-y-1/2 pointer-events-none"></div>
+        <div class="absolute top-1/3 right-1/4 w-40 h-40 border border-gray-200 rounded-full pointer-events-none"></div>
+        <!-- NEW Decorative Elements for Services Section -->
+        <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-[#223B51]/5 rounded-full blur-3xl pointer-events-none -z-10"></div>
+        <div class="absolute bottom-1/4 right-1/12 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl pointer-events-none -z-10"></div>
+        <div class="absolute top-1/2 left-0 w-32 h-32 bg-orange-500/2 rounded-full blur-xl -translate-x-1/2 pointer-events-none -z-10"></div>
+        <div class="absolute bottom-0 left-1/3 w-40 h-40 border border-[#223B51]/10 rounded-full pointer-events-none -z-10"></div>
+        <div class="absolute top-10 right-10 w-24 h-24 border-2 border-orange-500/5 rounded-[2rem] rotate-45 pointer-events-none"></div>
+        <!-- Ek Dekoratif Dokunuşlar -->
+        <div class="absolute top-1/2 right-0 w-64 h-64 bg-[#223B51]/3 rounded-full blur-2xl translate-x-1/2 pointer-events-none -z-10"></div>
+        <div class="absolute top-[60%] left-[15%] w-48 h-px bg-gradient-to-r from-transparent via-orange-500/20 to-transparent rotate-12 pointer-events-none"></div>
+        <div class="absolute top-[40%] right-[10%] w-32 h-32 border border-[#223B51]/5 rounded-full pointer-events-none"></div>
+        <!-- Large background icon -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-gray-200/5 text-[150px] pointer-events-none z-0">
+            <i class="fas fa-sun"></i>
+        </div>
+        <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- Bölüm Başlığı ve Mimari Geçiş -->
+            <div class="flex flex-col items-center justify-center mb-20 text-center relative" data-aos="fade-up">
+                <!-- Başlık Arkası Premium Dokunuşlar -->
+                <div class="absolute -top-10 left-1/2 -translate-x-1/2 w-full h-40 bg-orange-500/5 blur-[120px] -z-10 pointer-events-none"></div>
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-24 bg-[#223B51]/3 -skew-y-2 -z-10 pointer-events-none"></div>
+
+                <div class="w-px h-12 bg-gradient-to-b from-orange-500 to-transparent mb-8"></div>
+                <span class="text-orange-500 font-bold uppercase tracking-[0.4em] text-[10px] mb-4 block italic">Neler Yapıyoruz?</span>
+                <h4 class="text-4xl md:text-5xl font-black text-gray-900 uppercase tracking-tighter leading-none">Hizmetlerimiz</h4>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <!-- Hizmet 1 -->
+                <div class="service-card" data-aos="fade-up" data-images="images/ZipPerde1.jpeg,images/ZipPerde2.jpeg,images/ZipPerde3.jpeg">
+                    <!-- Decorative Background Decor -->
+                    <div class="absolute -right-20 -top-20 w-64 h-64 bg-[#223B51]/5 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="card-image-container">
+                        <img src="images/ZipPerde1.jpeg" alt="Zip Perde">
+                        <div class="card-overlay-content">
+                            <div class="title-group pl-2">
+                                <span class="card-tag text-[9px] font-bold uppercase tracking-[0.2em] text-white/90 mb-3">Groupomz</span>
+                                <h2 class="text-xl font-bold leading-tight uppercase tracking-tighter">Zip Perde</h2>
+                            </div>
+                            <div class="icon-box"><i class="fa-solid fa-wind"></i></div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        <p>Özel fermuarlı ray sistemi sayesinde rüzgara karşı yüksek dayanım gösteren, dış mekanlarda ısı ve ışık kontrolü sağlayan estetik perde çözümü.</p>
+                    </div>
+                </div>
+                <!-- Hizmet 2 -->
+                <div class="service-card" data-aos="fade-up" data-aos-delay="100" data-images="images/GiyotinCamBalkon1.jpeg,images/GiyotinCamBalkon2.jpeg,images/GiyotinCamBalkon3.jpeg">
+                    <div class="card-image-container">
+                        <img src="images/GiyotinCamBalkon1.jpeg" alt="Giyotin Cam Balkon">
+                        <div class="card-overlay-content">
+                            <div class="title-group pl-2">
+                                <span class="card-tag text-[9px] font-bold uppercase tracking-[0.2em] text-white/90 mb-3">Groupomz</span>
+                                <h2 class="text-xl font-bold leading-tight uppercase tracking-tighter">Giyotin Cam Balkon</h2>
+                            </div>
+                            <div class="icon-box"><i class="fa-solid fa-up-down"></i></div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        <p>Isı yalıtımlı motorlu cam panelleri ile balkonunuzu kış bahçesine dönüştürün. Dikey hareket sistemi ile güvenli ve estetik bir kullanım sunar.</p>
+                    </div>
+                </div>
+                <!-- Hizmet 3 -->
+                <div class="service-card" data-aos="fade-up" data-aos-delay="200" data-images="images/KasetliTente1.jpeg,images/KasetliTente2.jpeg,images/KasetliTente3.jpeg">
+                    <div class="card-image-container">
+                        <img src="images/KasetliTente1.jpeg" alt="Kasetli Tente">
+                        <div class="card-overlay-content">
+                            <div class="title-group pl-2">
+                                <span class="card-tag text-[9px] font-bold uppercase tracking-[0.2em] text-white/90 mb-3">Groupomz</span>
+                                <h2 class="text-xl font-bold leading-tight uppercase tracking-tighter">Kasetli Tente</h2>
+                            </div>
+                            <div class="icon-box"><i class="fa-solid fa-box-archive"></i></div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        <p>Mekanizmayı ve kumaşı dış etkenlerden koruyan kapalı kaset sistemi ile uzun yıllar ilk günkü estetiğini koruyan gölgelendirme ünitesi.</p>
+                    </div>
+                </div>
+                <!-- Hizmet 4 -->
+                <div class="service-card" data-aos="fade-up" data-images="images/ElektronikDekorasyon1.jpeg,images/ElektronikDekorasyon2.jpeg,images/ElektronikDekorasyon3.jpeg,images/ElektronikDekorasyon4.jpeg,images/ElektronikDekorasyon5.jpeg">
+                    <div class="card-image-container">
+                        <img src="images/ElektronikDekorasyon1.jpeg" alt="Elektronik Dekorasyon">
+                        <div class="card-overlay-content">
+                            <div class="title-group pl-2">
+                                <span class="card-tag text-[9px] font-bold uppercase tracking-[0.2em] text-white/90 mb-3">Groupomz</span>
+                                <h2 class="text-xl font-bold leading-tight uppercase tracking-tighter">Elektronik Dekorasyon</h2>
+                            </div>
+                            <div class="icon-box"><i class="fa-solid fa-microchip"></i></div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        <p>Yaşam alanlarınıza teknoloji ve konfor katan, uzaktan kumandalı veya akıllı otomasyon destekli modern dekoratif mekanizmalar.</p>
+                    </div>
+                </div>
+                <!-- Hizmet 5 -->
+                <div class="service-card" data-aos="fade-up" data-aos-delay="100" data-images="images/OtomatikKapi1.jpeg,images/OtomatikKapi2.jpeg,images/OtomatikKapi3.jpeg">
+                    <div class="card-image-container">
+                        <img src="images/OtomatikKapi1.jpeg" alt="Otomatik Kapı">
+                        <div class="card-overlay-content">
+                            <div class="title-group pl-2">
+                                <span class="card-tag text-[9px] font-bold uppercase tracking-[0.2em] text-white/90 mb-3">Groupomz</span>
+                                <h2 class="text-xl font-bold leading-tight uppercase tracking-tighter">Otomatik Kapı</h2>
+                            </div>
+                            <div class="icon-box"><i class="fa-solid fa-door-open"></i></div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        <p>Fotoselli, radar sensörlü ve yüksek güvenlikli giriş çözümleri ile mağaza, ofis ve binalarda konforlu ve hijyenik geçiş imkanı.</p>
+                    </div>
+                </div>
+                <!-- Hizmet 6 -->
+                <div class="service-card" data-aos="fade-up" data-aos-delay="200" data-images="images/Panjur1.jpeg,images/Panjur2.jpeg,images/Panjur3.jpeg">
+                    <div class="card-image-container">
+                        <img src="images/Panjur1.jpeg" alt="Otomatik Panjur">
+                        <div class="card-overlay-content">
+                            <div class="title-group pl-2">
+                                <span class="card-tag text-[9px] font-bold uppercase tracking-[0.2em] text-white/90 mb-3">Groupomz</span>
+                                <h2 class="text-xl font-bold leading-tight uppercase tracking-tighter">Otomatik Panjur</h2>
+                            </div>
+                            <div class="icon-box"><i class="fa-solid fa-border-all"></i></div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        <p>Poliüretan dolgulu lamelleri ile üstün ısı ve ses yalıtımı sunan, aynı zamanda güvenliğinizi en üst seviyeye çıkaran motorlu panjur sistemleri.</p>
+                    </div>
+                </div>
+                <!-- Hizmet 7 -->
+                <div class="service-card" data-aos="fade-up" data-images="images/TavanPerdesi1.jpeg,images/TavanPerdesi2.jpeg,images/TavanPerdesi3.jpeg">
+                    <div class="card-image-container">
+                        <img src="images/TavanPerdesi1.jpeg" alt="Tavan Perdesi">
+                        <div class="card-overlay-content">
+                            <div class="title-group pl-2">
+                                <span class="card-tag text-[9px] font-bold uppercase tracking-[0.2em] text-white/90 mb-3">Groupomz</span>
+                                <h2 class="text-xl font-bold leading-tight uppercase tracking-tighter">Tavan Perdesi</h2>
+                            </div>
+                            <div class="icon-box"><i class="fa-solid fa-cloud-sun"></i></div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        <p>Cam tavanlı kış bahçeleri ve teras alanlarında güneşin yakıcı etkisini kıran, içeriye ferah bir atmosfer kazandıran özel tavan storları.</p>
+                    </div>
+                </div>
+                <!-- Hizmet 8 -->
+                <div class="service-card" data-aos="fade-up" data-aos-delay="100" data-images="images/Wintent1.jpeg,images/Wintent2.jpeg,images/Wintent3.jpeg">
+                    <!-- Decorative Background Decor -->
+                    <div class="absolute -left-20 -bottom-20 w-64 h-64 bg-[#223B51]/5 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="card-image-container">
+                        <img src="images/Wintent1.jpeg" alt="Wintent Tente">
+                        <div class="card-overlay-content">
+                            <div class="title-group pl-2">
+                                <span class="card-tag text-[9px] font-bold uppercase tracking-[0.2em] text-white/90 mb-3">Groupomz</span>
+                                <h2 class="text-xl font-bold leading-tight uppercase tracking-tighter">Wintent Tente</h2>
+                            </div>
+                            <div class="icon-box"><i class="fa-solid fa-sun"></i></div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        <p>Kompakt tasarımı ve 180 dereceye varan geniş hareket açısı ile pencerelere şıklık katan, fonksiyonel ve dekoratif gölgelendirme sistemi.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bento Grid Section -->
+    <section id="bento-features" class="py-24 bg-[#223B51] text-white relative overflow-hidden z-0">
+        <!-- Bento Section Decorative Elements -->
+        <div class="absolute top-0 right-0 w-1/2 h-full bg-white/5 -skew-x-12 transform translate-x-1/4 pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 w-1/3 h-1/2 bg-orange-500/5 skew-x-12 transform -translate-x-1/4 pointer-events-none"></div>
+        
+        <!-- Large Background Icons for Bento Text Blocks -->
+        <div class="absolute top-[15%] right-[10%] text-white/5 text-[200px] pointer-events-none -z-10">
+            <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="absolute bottom-[20%] left-[5%] text-white/5 text-[180px] pointer-events-none -z-10">
+            <i class="fas fa-lightbulb"></i>
+        </div>
+
+        <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-stretch">
+                
+                <!-- Card 1: Wintent (Sol Üst) -->
+                <div class="bento-reveal" data-bento>
+                    <div class="bento-card">
+                        <div class="h-[400px]"><img src="images/Wintent1.jpeg" alt="Wintent" class="w-full h-full object-cover"></div>
+                        <div class="p-10 text-[#223B51]">
+                            <h3 class="text-2xl font-bold mb-4 uppercase tracking-tighter">Wintent Tente</h3>
+                            <p class="text-[#223B51]/80 mb-6 leading-relaxed font-medium">Pencerelerinize değer katan, fonksiyonel ve estetik gölgelendirme çözümleri sunuyoruz.</p>
+                            <a href="#services" class="inline-block border-b-2 border-[#223B51] pb-1 text-sm font-bold uppercase tracking-widest hover:opacity-70 transition">İncele</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Header Block (Sağ Üst) -->
+                <div class="flex flex-col justify-center p-10 bento-reveal" data-bento>
+                    <div class="flex items-center space-x-4 mb-6">
+                        <div class="w-10 h-10 bg-orange-500/10 rounded-xl flex items-center justify-center"><i class="fas fa-shield-alt text-orange-500"></i></div>
+                        <span class="text-orange-500 font-bold uppercase tracking-[0.4em] text-[10px] italic">Neden Biz?</span>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-black uppercase tracking-tighter leading-tight">Yaşam alanlarınıza değer katan yenilikçi mimari çözümler üretiyoruz.</h2>
+                    <p class="mt-6 text-slate-300 text-lg">Groupomz olarak teknolojiyi estetikle harmanlıyoruz.</p>
+                </div>
+
+                <!-- Card 2: Tavan Perdesi (Sol Orta) -->
+                <div class="bento-reveal" data-bento>
+                    <div class="bento-card">
+                        <div class="h-[400px]"><img src="images/TavanPerdesi1.jpeg" alt="Tavan Perdesi" class="w-full h-full object-cover"></div>
+                        <div class="p-10 text-[#223B51]">
+                            <h3 class="text-2xl font-bold mb-4 uppercase tracking-tighter">Tavan Perdesi</h3>
+                            <p class="text-[#223B51]/80 mb-6 leading-relaxed font-medium">Kış bahçeleri için mükemmel ısı ve ışık kontrolü sağlayan profesyonel sistemler.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Panjur (Sağ Orta) -->
+                <div class="bento-reveal" data-bento>
+                    <div class="bento-card">
+                        <div class="h-[400px]"><img src="images/Panjur1.jpeg" alt="Panjur" class="w-full h-full object-cover"></div>
+                        <div class="p-10 text-[#223B51]">
+                            <h3 class="text-2xl font-bold mb-4 uppercase tracking-tighter">Otomatik Panjur</h3>
+                            <p class="text-[#223B51]/80 mb-6 leading-relaxed font-medium">Güvenlik ve yalıtımı bir arada sunan akıllı panjur teknolojileri ile huzurlu yaşam alanları.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vision Block (Sol Alt) -->
+                <div class="flex flex-col justify-center p-10 bento-reveal text-right" data-bento>
+                    <div class="flex items-center justify-end space-x-4 mb-6">
+                        <span class="text-orange-500 font-bold uppercase tracking-[0.4em] text-[10px] italic">Vizyonumuz</span>
+                        <div class="w-10 h-10 bg-orange-500/10 rounded-xl flex items-center justify-center"><i class="fas fa-lightbulb text-orange-500"></i></div>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-black uppercase tracking-tighter leading-tight">Geleceğin teknolojisini estetik tasarımlarla buluşturuyoruz.</h2>
+                </div>
+
+                <!-- Card 4: Giyotin Cam (Sağ Alt) -->
+                <div class="bento-reveal" data-bento>
+                    <div class="bento-card">
+                        <div class="h-[400px]"><img src="images/GiyotinCamBalkon1.jpeg" alt="Giyotin Cam" class="w-full h-full object-cover"></div>
+                        <div class="p-10 text-[#223B51]">
+                            <h3 class="text-2xl font-bold mb-4 uppercase tracking-tighter">Giyotin Cam</h3>
+                            <p class="text-[#223B51]/80 mb-6 leading-relaxed font-medium">Dikey hareket eden motorlu paneller ile manzaranızı kesintisiz koruyun ve alan kazanın.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Decorative Divider Section -->
+    <div class="bg-[#223B51] py-12 flex flex-col items-center">
+        <div class="w-px h-24 bg-gradient-to-b from-orange-500 to-transparent"></div>
+        <div class="mt-8 text-center" data-aos="fade-up">
+            <h5 class="text-orange-500 font-bold uppercase tracking-[0.5em] text-[11px] italic">Mükemmellik Detaylarda Saklıdır</h5>
+        </div>
+    </div>
+
+    <!-- Crocist Sistem Özellikleri Section -->
+    <section id="system-features" class="py-24 relative overflow-hidden" style="background-color: #223B51;">
+        <!-- Decorative Background Element -->
+        <div class="absolute top-0 left-0 w-1/2 h-full bg-white/5 -skew-x-12 transform -translate-x-1/4 pointer-events-none"></div>
+        <div class="absolute bottom-0 right-0 w-1/3 h-1/2 bg-orange-500/5 skew-x-12 transform translate-x-1/4 pointer-events-none"></div>
+        <div class="absolute top-1/4 left-1/4 w-24 h-24 bg-orange-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-32 h-32 border-2 border-white/10 rounded-full pointer-events-none"></div>
+        <!-- Large background icon -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white/5 text-[150px] pointer-events-none z-0">
+            <i class="fas fa-cogs"></i>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="features-grid-container">
+                <div class="feature-card" data-aos="fade-up">
+                    <div class="feature-icon-container">
+                        <i data-lucide="circle-dot"></i>
+                    </div>
+                    <h2>Estetik & Modern</h2>
+                    <p>Mimaride şıklığın yeni adı. Groupomz sistemleri, ince profil yapıları ve zengin renk seçenekleriyle yapınızın dış görünüşüne modern bir dokunuş katar, görsel bütünlüğü bozmadan değerini artırır.</p>
+                </div>
+
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon-container">
+                        <i data-lucide="thermometer"></i>
+                    </div>
+                    <h2>Isı Yalıtımı</h2>
+                    <p>Dört mevsim ideal iklimlendirme. Yüksek teknolojiyle üretilen poliüretan dolgulu lameller ve özel conta sistemleri, kışın ısı kaybını önlerken yazın yakıcı güneş sıcaklığını dışarıda tutarak enerji tasarrufu sağlar.</p>
+                </div>
+
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon-container icon-flip">
+                        <i data-lucide="ear"></i>
+                    </div>
+                    <h2>Ses Yalıtımı</h2>
+                    <p>Şehrin gürültüsünü dışarıda bırakın. Üstün sızdırmazlık detayları ve cam kalınlığı opsiyonlarıyla iç mekanlarda huzurlu ve sessiz bir atmosfer yaratarak yaşam kalitenizi artırır.</p>
+                </div>
+
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon-container">
+                        <i data-lucide="eye-off"></i>
+                    </div>
+                    <h2>Güvenlik</h2>
+                    <p>Huzurunuz bizim önceliğimiz. Darbelere dayanıklı sağlam yapısı ve zorlamalara karşı dirençli kilit mekanizmalarıyla, mekanlarınızı hırsızlığa ve dış müdahalelere karşı güvenli bir kaleye dönüştürür.</p>
+                </div>
+
+                <div class="feature-card" data-aos="fade-up">
+                    <div class="feature-icon-container">
+                        <i data-lucide="biohazard"></i>
+                    </div>
+                    <h2>Haşere Koruması</h2>
+                    <p>Kesintisiz temiz hava, sıfır davetsiz misafir. Sistemlerimize entegre edilebilen sineklik çözümleri sayesinde, haşerelerden korunurken mekanınızı özgürce havalandırmanın tadını çıkarın.</p>
+                </div>
+
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon-container">
+                        <i data-lucide="thumbs-up"></i>
+                    </div>
+                    <h2>Kullanım Kolaylığı</h2>
+                    <p>Tek dokunuşla tam kontrol. Akıllı motor sistemleri ve ergonomik manuel seçenekler sayesinde, sistemlerinizi yorulmadan, zahmetsizce ve akıcı bir şekilde yönetebilirsiniz.</p>
+                </div>
+
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon-container">
+                        <i data-lucide="maximize-2"></i>
+                    </div>
+                    <h2>Alan Tasarrufu</h2>
+                    <p>Mekanınızı daraltmadan genişletin. Dikey veya yatay hareket kabiliyetine sahip kompakt tasarımlar, dar alanlarda bile maksimum verim sunarak size daha fazla kullanım alanı bırakır.</p>
+                </div>
+
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon-container">
+                        <i data-lucide="layers"></i>
+                    </div>
+                    <h2>Konfor</h2>
+                    <p>Detaylarda saklı rahatlık. Işık kontrolünden gizliliğe kadar her detayı sizin için optimize eden Groupomz çözümleri, evinizde veya iş yerinizde en konforlu deneyimi yaşatmak için tasarlandı.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ücretsiz Keşif Section -->
+    <section id="free-discovery" class="py-24 bg-white border-t border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <span class="text-orange-500 font-bold uppercase tracking-widest text-[10px] mb-4 block">Hızlı Çözüm</span>
+                <h2 class="text-5xl font-extrabold text-gray-900 italic uppercase tracking-tighter mb-6">Ücretsiz Keşif Formu</h2>
+                <p class="text-gray-500 max-w-2xl mx-auto font-medium">
+                    Lütfen formu eksiksiz doldurunuz. Ücretsiz keşif için formumuzu doldurmanız yeterlidir. Formu doldurduğunuzda uzman ekibimiz en kısa sürede sizinle irtibata geçecektir.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="order-2 lg:order-1 flex justify-center relative py-10" data-aos="fade-right">
+                    <!-- Dekoratif Geometrik Çizimler -->
+                    <div class="absolute -z-10 w-72 h-72 bg-orange-500/10 rounded-full -top-10 -left-10 blur-3xl parallax-el" data-speed="0.05"></div>
+                    <div class="absolute -z-10 w-48 h-48 border-2 border-[#223B51]/10 rounded-[3rem] top-1/4 -right-10 rotate-12 parallax-el" data-speed="0.12"></div>
+                    <div class="absolute -z-10 w-32 h-32 dots-pattern opacity-30 bottom-10 -left-5 parallax-el" data-speed="0.08"></div>
+                    <div class="absolute -z-10 w-24 h-24 bg-orange-500/5 rounded-full bottom-20 right-0 parallax-el" data-speed="0.15"></div>
+                    <div class="absolute -z-10 w-40 h-40 bg-[#223B51]/5 rounded-full -bottom-10 -right-10 blur-2xl parallax-el" data-speed="0.07"></div>
+                    <div class="absolute -z-10 w-20 h-20 border-2 border-orange-500/10 rounded-full top-0 left-0 parallax-el" data-speed="0.10"></div>
+                    
+                    <img src="images/Ucretsiz.png" alt="Ücretsiz Keşif" class="w-full max-w-lg h-auto rounded-[2.5rem] shadow-2xl relative z-10">
+                </div>
+                <div class="order-1 lg:order-2 bg-gray-50 p-8 md:p-12 rounded-[2.5rem] shadow-sm border border-gray-100" data-aos="fade-left">
+                    <form id="discovery-form" class="grid grid-cols-1 md:grid-cols-2 gap-6 relative">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-2">Adınız Soyadınız *</label>
+                            <input type="text" name="fullname" placeholder="Örn: Ahmet Yılmaz" class="w-full bg-white border border-gray-200 rounded-2xl px-6 py-4 outline-none focus:border-orange-500 transition shadow-sm" required>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-2">Telefon Numaranız *</label>
+                            <input type="tel" id="form-phone" name="phone" placeholder="5xx xxx xx xx" maxlength="10" inputmode="numeric" class="w-full bg-white border border-gray-200 rounded-2xl px-6 py-4 outline-none focus:border-orange-500 transition shadow-sm" required>
+
+
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-2">E-posta Adresiniz</label>
+                            <input type="email" name="email" placeholder="ornek@mail.com" class="w-full bg-white border border-gray-200 rounded-2xl px-6 py-4 outline-none focus:border-orange-500 transition shadow-sm" required>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-2">Ürün Seçimi *</label>
+                            <select name="product" class="w-full bg-white border border-gray-200 rounded-2xl px-6 py-4 outline-none focus:border-orange-500 transition shadow-sm appearance-none" required>
+                                <option value="">Seçiniz</option>
+                                <option value="Zip Perde">Zip Perde</option>
+                                <option value="Bioklimatik Pergola">Bioklimatik Pergola</option>
+                                <option value="Giyotin Cam">Giyotin Cam</option>
+                                <option>Sürme Cam Sistemleri</option>
+                                <option>Katlanır Cam Balkon</option>
+                                <option>Rolling Roof</option>
+                                <option>Kasetli Tente</option>
+                                <option>Wintent Sistemleri</option>
+                                <option>Kış Bahçesi</option>
+                                <option value="Diğer">Diğer</option>
+                            </select>
+                        </div>
+                        <div class="space-y-2 md:col-span-2">
+                            <label class="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-2">Keşif Adresi ve Notlar *</label>
+                            <textarea name="message" rows="4" placeholder="Keşif yapılacak tam adres ve belirtmek istediğiniz detaylar..." class="w-full bg-white border border-gray-200 rounded-2xl px-6 py-4 outline-none focus:border-orange-500 transition shadow-sm" required></textarea>
+                        </div>
+                        <div class="md:col-span-2 mt-4 text-center">
+                            <button type="submit" id="submit-btn" class="inline-block bg-[#223B51] text-white px-12 py-5 rounded-full font-bold uppercase tracking-[0.2em] text-[11px] hover:bg-orange-500 transition-all shadow-lg hover:shadow-orange-500/20 transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed">
+                                <span id="btn-text">Keşif Talebi Gönder</span>
+                            </button>
+                        </div>
+                        <!-- Form Durum Mesajları -->
+                        <div id="form-status" class="md:col-span-2 mt-4 hidden text-center font-bold uppercase tracking-widest text-[11px]"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer / İletişim Section -->
+    <footer id="contact" class="bg-[#223B51] text-white pt-32 pb-12 relative overflow-hidden">
+        <!-- Arka Plan Dekoratif Işık -->
+        <div class="absolute top-0 right-0 w-1/2 h-full bg-orange-500/5 -skew-x-12 transform translate-x-1/4 pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
+                
+                <!-- Sol Sütun: Marka & İletişim (5 Kolon) -->
+                <div class="lg:col-span-5" data-aos="fade-up">
+                    <img src="images/Logo.png" alt="Groupomz Logo" class="h-16 w-auto mb-10 opacity-90">
+                    <h2 class="text-4xl md:text-5xl font-extrabold mb-8 uppercase tracking-tighter leading-[1.1]">
+                        Projeleriniz İçin <br><span class="text-orange-500 italic">Çözüm Ortağınız.</span>
+                    </h2>
+                    <p class="text-slate-400 mb-10 text-lg leading-relaxed max-w-md">
+                        Modern mimari çözümlerimizle mekanlarınıza değer katıyor, konforu teknolojiyle buluşturuyoruz.
+                    </p>
+                    
+                    <div class="space-y-5 mb-12">
+                        <a href="mailto:Groupomz0@gmail.com" class="flex items-center group">
+                            <span class="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center mr-4 group-hover:bg-orange-500 transition-all duration-300">
+                                <i class="fas fa-envelope text-orange-500 group-hover:text-white text-sm"></i>
+                            </span>
+                            <span class="text-slate-200 font-bold tracking-wide transition-colors group-hover:text-orange-500">Groupomz0@gmail.com</span>
+                        </a>
+                        <a href="tel:+905397724528" class="flex items-center group">
+                            <span class="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center mr-4 group-hover:bg-orange-500 transition-all duration-300">
+                                <i class="fas fa-phone text-orange-500 group-hover:text-white text-sm"></i>
+                            </span>
+                            <span class="text-slate-200 font-bold tracking-wide transition-colors group-hover:text-orange-500">+90 539 772 45 28</span>
+                        </a>
+                    </div>
+
+                    <div class="flex space-x-3">
+                        <a href="#" class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center hover:bg-orange-500 transition-all duration-500 group">
+                            <i class="fab fa-instagram group-hover:scale-110"></i>
+                        </a>
+                        <a href="#" class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center hover:bg-[#1877F2] transition-all duration-500 group">
+                            <i class="fab fa-facebook-f group-hover:scale-110"></i>
+                        </a>
+                        <a href="#" class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center hover:bg-[#FF0000] transition-all duration-500 group">
+                            <i class="fab fa-youtube group-hover:scale-110"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Orta Sütun: Hızlı Menü (2 Kolon) -->
+                <div class="lg:col-span-2 mt-4" data-aos="fade-up" data-aos-delay="100">
+                    <h4 class="text-orange-500 font-bold uppercase tracking-[0.3em] text-[11px] mb-10">Hızlı Menü</h4>
+                    <ul class="space-y-5">
+                        <li><a href="#home" class="text-slate-400 hover:text-white transition-colors text-sm font-medium tracking-wide">Ana Sayfa</a></li>
+                        <li><a href="#services" class="text-slate-400 hover:text-white transition-colors text-sm font-medium tracking-wide">Hizmetlerimiz</a></li>
+                        <li><a href="#free-discovery" class="text-slate-400 hover:text-white transition-colors text-sm font-medium tracking-wide">Ücretsiz Keşif</a></li>
+                        <li><a href="#contact" class="text-slate-400 hover:text-white transition-colors text-sm font-medium tracking-wide">İletişim</a></li>
+                    </ul>
+                </div>
+
+                <!-- Sağ Sütun: Süreç Kartı (5 Kolon) -->
+                <div class="lg:col-span-5" data-aos="fade-left">
+                    <div class="bg-white/5 p-10 rounded-[3rem] border border-white/10 relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 p-8 opacity-5">
+                            <i class="fas fa-tools text-8xl"></i>
+                        </div>
+                        <h4 class="text-white font-bold uppercase tracking-widest text-sm mb-10 flex items-center">
+                            <span class="w-8 h-px bg-orange-500 mr-4"></span> İş Akışımız
+                        </h4>
+                        
+                        <div class="space-y-10">
+                            <div class="flex items-start">
+                                <span class="text-3xl font-black text-white/10 mr-6 mt-1 group-hover:text-orange-500/30 transition-colors italic">01</span>
+                                <div>
+                                    <h5 class="font-bold text-white mb-2 uppercase tracking-tight text-sm">Keşif ve Analiz</h5>
+                                    <p class="text-slate-400 text-[13px] leading-relaxed">Teknik ölçümleri ve ihtiyaç analizini yerinde yapıyoruz.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="text-3xl font-black text-white/10 mr-6 mt-1 group-hover:text-orange-500/30 transition-colors italic">02</span>
+                                <div>
+                                    <h5 class="font-bold text-white mb-2 uppercase tracking-tight text-sm">Projelendirme</h5>
+                                    <p class="text-slate-400 text-[13px] leading-relaxed">En uygun sistemleri dijital ortamda planlıyoruz.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="text-3xl font-black text-white/10 mr-6 mt-1 group-hover:text-orange-500/30 transition-colors italic">03</span>
+                                <div>
+                                    <h5 class="font-bold text-white mb-2 uppercase tracking-tight text-sm">Hızlı Kurulum</h5>
+                                    <p class="text-slate-400 text-[13px] leading-relaxed">Montaj sonrası projenizi titizlikle teslim ediyoruz.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alt Footer (Copyright) -->
+            <div class="mt-24 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 text-[10px] font-bold uppercase tracking-[0.3em] text-slate-500">
+                <p>&copy; 2024 GROUPOMZ. TÜM HAKLARI SAKLIDIR.</p>
+                <div class="flex space-x-8">
+                    <a href="#" class="hover:text-orange-500 transition-colors">GİZLİLİK POLİTİKASI</a>
+                    <a href="#" class="hover:text-orange-500 transition-colors">KVKK</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/905397724528" target="_blank" class="whatsapp-float">
+        <div class="w-16 h-16 bg-[#25D366] rounded-2xl flex items-center justify-center text-white text-3xl shadow-2xl shadow-green-500/30">
+            <i class="fab fa-whatsapp"></i>
+        </div>
+    </a>
+
+    <!-- Hizmet Detay Modalı -->
+    <div id="service-modal" class="modal-overlay items-center justify-center p-4">
+        <div class="modal-content bg-white w-full max-w-4xl rounded-[2.5rem] overflow-hidden relative flex flex-col md:flex-row shadow-2xl">
+            <button id="close-modal" class="absolute top-6 right-6 z-[110] bg-black/20 hover:bg-black/40 text-white w-10 h-10 rounded-full flex items-center justify-center transition backdrop-blur-md">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="md:w-1/2 h-[300px] md:h-[500px] relative overflow-hidden">
+                <img id="modal-image" src="" alt="" class="w-full h-full object-cover transition-opacity duration-300">
+                <button id="modal-prev" class="absolute top-1/2 left-4 -translate-y-1/2 bg-black/20 hover:bg-black/40 text-white w-8 h-8 rounded-full flex items-center justify-center transition backdrop-blur-md z-20">
+                    <i class="fas fa-chevron-left text-xs"></i>
+                </button>
+                <button id="modal-next" class="absolute top-1/2 right-4 -translate-y-1/2 bg-black/20 hover:bg-black/40 text-white w-8 h-8 rounded-full flex items-center justify-center transition backdrop-blur-md z-20">
+                    <i class="fas fa-chevron-right text-xs"></i>
+                </button>
+                <div id="modal-pagination" class="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex space-x-2"></div>
+            </div>
+            <div class="md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
+                <div class="flex items-center space-x-4 mb-6">
+                    <div id="modal-icon-container" class="bg-orange-500 text-white w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-lg shadow-orange-500/20">
+                        <i id="modal-icon" class=""></i>
+                    </div>
+                    <div>
+                        <span class="text-orange-500 text-[10px] font-bold uppercase tracking-widest block mb-1">Groupomz Kalitesi</span>
+                        <h3 id="modal-title" class="text-3xl font-black text-[#223B51] uppercase tracking-tighter leading-tight"></h3>
+                    </div>
+                </div>
+                <p id="modal-text" class="text-[#223B51] leading-relaxed mb-10 text-lg"></p>
+                <a href="#free-discovery" onclick="closeModal()" class="inline-block bg-[#223B51] text-white text-center py-5 rounded-full font-bold uppercase tracking-[0.2em] text-[11px] hover:bg-orange-500 transition-all transform hover:-translate-y-1 shadow-xl">Ücretsiz Keşif Al</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- AOS Script -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- fslightbox Script (Büyütme/Küçültme için) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fslightbox/3.0.9/index.min.js"></script>
+    <!-- Vanilla Tilt Script (3D Efekt için) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
+    <script>
+
+        
+
+    // 1. EmailJS'i Başlat (Public Key'in buraya gelecek)
+
+    (function() {
+
+        emailjs.init("u94mKeq4R_A1Cu_l8"); 
+
+    })();
+
+
+
+    // 2. Form Gönderim İşlemi
+
+    const discoveryForm = document.getElementById('discovery-form');
+
+
+
+    discoveryForm.addEventListener('submit', function(event) {
+
+        event.preventDefault(); // Sayfanın yenilenmesini engeller
+
+
+
+        // Butonu "Gönderiliyor..." yapalım (isteğe bağlı ama profesyonel görünür)
+
+        const btn = this.querySelector('button');
+
+        btn.innerText = 'Gönderiliyor...';
+
+
+
+        // 3. EmailJS'e gönder
+
+        emailjs.sendForm('service_xfoap5b', 'template_sji0p9a', this)
+
+            .then(function() {
+
+                alert('Talebiniz başarıyla alındı, teşekkürler!');
+
+                discoveryForm.reset(); // Formu temizle
+
+                btn.innerText = 'Keşif Talebi Gönder';
+
+            }, function(error) {
+
+                alert('Bir hata oluştu, lütfen tekrar deneyin.');
+
+                console.log('Hata:', error);
+
+                btn.innerText = 'Keşif Talebi Gönder';
+
+            });
+
+    });
+
+        // Navbar Kaydırma Efekti
+        window.onload = () => {
+            document.body.classList.add('loaded');
+        };
+
+        const navbar = document.getElementById('navbar');
+        const navbarContainer = document.getElementById('navbar-container');
+        const navbarLogo = document.getElementById('navbar-logo');
+        const mobileIcon = document.getElementById('mobile-icon');
+        const scrollIndicator = document.getElementById('scroll-indicator');
+        
+        window.addEventListener('scroll', () => {
+            const scroll = window.scrollY;
+
+            // Hero Parallax & Fade Effect
+            const heroContent = document.querySelectorAll('#home .max-w-3xl');
+            heroContent.forEach(el => {
+                el.style.transform = `translateY(${scroll * 0.3}px)`;
+                el.style.opacity = 1 - (scroll / 600);
+            });
+
+            if (scrollIndicator) scrollIndicator.style.opacity = 1 - (scroll / 300);
+
+            if (window.scrollY > 50) {
+                navbar.classList.add('glass', 'shadow-sm', 'border-gray-100', 'text-gray-900');
+                navbar.classList.remove('border-transparent', 'text-white');
+                navbarContainer.classList.replace('h-22', 'h-14');
+                navbarLogo.classList.replace('h-20', 'h-10');
+                mobileIcon.classList.add('text-black');
+                mobileIcon.classList.remove('text-white');
+            } else {
+                navbar.classList.remove('glass', 'shadow-sm', 'border-gray-100', 'text-gray-900');
+                navbar.classList.add('border-transparent', 'text-white');
+                navbarContainer.classList.replace('h-14', 'h-22');
+                navbarLogo.classList.replace('h-10', 'h-20');
+                mobileIcon.classList.add('text-white');
+                mobileIcon.classList.remove('text-black');
+            }
+        });
+
+        // Mobil menü açma/kapama işlevi
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            const isActive = mobileMenu.classList.toggle('active');
+            navbar.classList.toggle('menu-active', isActive);
+            mobileIcon.classList.toggle('fa-ellipsis-v', !isActive);
+            mobileIcon.classList.toggle('fa-times', isActive);
+            
+            if (isActive) {
+                mobileIcon.classList.add('text-white');
+                mobileIcon.classList.remove('text-black');
+                document.body.style.overflow = 'hidden';
+            } else {
+                if (window.scrollY > 50) mobileIcon.classList.add('text-black');
+                else mobileIcon.classList.add('text-white');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Menü linklerine tıklandığında menüyü kapat
+        const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+                navbar.classList.remove('menu-active');
+                mobileIcon.classList.add('fa-ellipsis-v');
+                mobileIcon.classList.remove('fa-times');
+                document.body.style.overflow = '';
+
+                // İkon rengini mevcut scroll durumuna göre ayarla
+                if (window.scrollY > 50) {
+                    mobileIcon.classList.add('text-black');
+                    mobileIcon.classList.remove('text-white');
+                } else {
+                    mobileIcon.classList.add('text-white');
+                    mobileIcon.classList.remove('text-black');
+                }
+            });
+        });
+
+        // AOS Başlatma
+        AOS.init({
+            duration: 800,
+            once: false,
+            easing: 'ease-out-quad'
+        });
+        
+        // Lucide Icons Initializer
+        lucide.createIcons();
+
+        // Modal Logic
+        const modal = document.getElementById('service-modal');
+        const closeModalBtn = document.getElementById('close-modal');
+        const modalPrevBtn = document.getElementById('modal-prev');
+        const modalNextBtn = document.getElementById('modal-next');
+        const modalPagination = document.getElementById('modal-pagination');
+        let modalImages = [];
+        let currentModalIdx = 0;
+
+        function openModal(card) {
+            const title = card.querySelector('h2').innerText;
+            const iconClass = card.querySelector('.icon-box i').className;
+            const desc = card.querySelector('.card-description p').innerText;
+            
+            // data-images varsa al, yoksa sadece ana resmi diziye koy
+            const dataImages = card.getAttribute('data-images');
+            modalImages = dataImages ? dataImages.split(',') : [card.querySelector('img').src];
+            currentModalIdx = 0;
+
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-icon').className = iconClass;
+            document.getElementById('modal-text').innerText = desc;
+
+            updateModalImage(0);
+            createModalDots();
+
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('active'), 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function updateModalImage(idx) {
+            currentModalIdx = idx;
+            const modalImg = document.getElementById('modal-image');
+            modalImg.style.opacity = '0';
+            setTimeout(() => {
+                modalImg.src = modalImages[idx];
+                modalImg.style.opacity = '1';
+            }, 200);
+            updateModalDots();
+        }
+
+        function createModalDots() {
+            modalPagination.innerHTML = '';
+            if (modalImages.length <= 1) {
+                modalPrevBtn.style.display = 'none';
+                modalNextBtn.style.display = 'none';
+                return;
+            }
+            modalPrevBtn.style.display = 'flex';
+            modalNextBtn.style.display = 'flex';
+
+            modalImages.forEach((_, i) => {
+                const dot = document.createElement('button');
+                dot.className = `w-2 h-2 rounded-full transition-all duration-300 ${i === 0 ? 'bg-orange-500 w-4' : 'bg-white/50'}`;
+                dot.onclick = () => updateModalImage(i);
+                modalPagination.appendChild(dot);
+            });
+        }
+
+        function updateModalDots() {
+            const dots = modalPagination.children;
+            Array.from(dots).forEach((dot, i) => {
+                dot.className = i === currentModalIdx 
+                    ? 'w-4 h-2 rounded-full bg-orange-500 transition-all duration-300' 
+                    : 'w-2 h-2 rounded-full bg-white/50 transition-all duration-300';
+            });
+        }
+
+        function prevModalImage() {
+            let newIdx = currentModalIdx - 1;
+            if (newIdx < 0) newIdx = modalImages.length - 1;
+            updateModalImage(newIdx);
+        }
+
+        function nextModalImage() {
+            let newIdx = currentModalIdx + 1;
+            if (newIdx >= modalImages.length) newIdx = 0;
+            updateModalImage(newIdx);
+        }
+
+        modalPrevBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            prevModalImage();
+        });
+
+        modalNextBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            nextModalImage();
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (!modal.classList.contains('active')) return;
+            if (e.key === 'ArrowLeft') prevModalImage();
+            if (e.key === 'ArrowRight') nextModalImage();
+            if (e.key === 'Escape') closeModal();
+        });
+
+        function closeModal() {
+            modal.classList.remove('active');
+            setTimeout(() => modal.style.display = 'none', 400);
+            document.body.style.overflow = '';
+        }
+
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('click', () => openModal(card));
+        });
+
+        closeModalBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+        // Slider Logic
+        const sliderContainer = document.getElementById('slider-container');
+        const prevButton = document.getElementById('prev-slide');
+        const nextButton = document.getElementById('next-slide');
+        const pagination = document.getElementById('slider-pagination');
+        const slides = sliderContainer.children;
+        let currentSlide = 0;
+        let autoSlideTimer;
+
+        function showSlide(index) {
+            if (index < 0) {
+                currentSlide = slides.length - 1;
+            } else if (index >= slides.length) {
+                currentSlide = 0;
+            } else {
+                currentSlide = index;
+            }
+            sliderContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+            updateDots();
+        }
+
+        // Pagination noktalarını oluştur
+        function createDots() {
+            Array.from(slides).forEach((_, i) => {
+                const dot = document.createElement('button');
+                dot.className = `w-2 h-2 rounded-full bg-white/30 transition-all duration-500 hover:bg-white/60`;
+                dot.onclick = () => {
+                    showSlide(i);
+                    startAutoSlide();
+                };
+                pagination.appendChild(dot);
+            });
+            updateDots();
+        }
+
+        function updateDots() {
+            const dots = pagination.children;
+            Array.from(dots).forEach((dot, i) => {
+                const isActive = i === currentSlide;
+                dot.className = isActive 
+                    ? 'w-8 h-2 rounded-full bg-orange-500 transition-all duration-500' 
+                    : 'w-2 h-2 rounded-full bg-white/30 transition-all duration-500 hover:bg-white/60';
+            });
+        }
+
+        function startAutoSlide() {
+            stopAutoSlide();
+            autoSlideTimer = setInterval(() => {
+                showSlide(currentSlide + 1);
+            }, 5000);
+        }
+
+        function stopAutoSlide() {
+            if (autoSlideTimer) clearInterval(autoSlideTimer);
+        }
+
+        prevButton.addEventListener('click', () => {
+            showSlide(currentSlide - 1);
+            startAutoSlide();
+        });
+
+        nextButton.addEventListener('click', () => {
+            showSlide(currentSlide + 1);
+            startAutoSlide();
+        });
+
+        // Mobile Swipe Support for Slider
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        sliderContainer.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        sliderContainer.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            if (touchStartX - touchEndX > 50) {
+                showSlide(currentSlide + 1); // Swipe Left
+            } else if (touchEndX - touchStartX > 50) {
+                showSlide(currentSlide - 1); // Swipe Right
+            }
+            startAutoSlide();
+        }
+
+        createDots();
+        startAutoSlide();
+
+        // Bento Grid Observer
+        const bentoItems = document.querySelectorAll('[data-bento]');
+        const bentoObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                } else {
+                    entry.target.classList.remove('show');
+                }
+            });
+        }, { threshold: 0.1 });
+        bentoItems.forEach(item => bentoObserver.observe(item));
+    </script>
+
+</body>
+</html>
+            

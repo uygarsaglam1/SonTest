@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"name": "Test",
+			"path": "../../Test"
+		},
+		{
+			"name": "WebSitem",
+			"path": ".."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "WebSitem"
+	}
+}
