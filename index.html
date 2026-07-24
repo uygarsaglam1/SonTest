@@ -5,21 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>GroupOmz | Güneş Gölge Kontrol Sistemleri</title>
     <link rel="icon" type="image/x-icon" href="images/ZaferLogo2.ico">
+    
+    <!-- DNS preconnect ile harici sunucu bağlantılarını hızlandırma -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+    <!-- Kritik İlk Ekran Görsellerini Önceden Yükleme -->
+    <link rel="preload" as="image" href="images/CamBalkon1.png">
+    <link rel="preload" as="image" href="images/Kaset1.png">
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <!-- Font Awesome (İkonlar için) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- AOS Animation Library -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- EmailJS SDK -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
+    <!-- Asenkron Yüklenen CSS ve Font Kütüphaneleri (Render Blocking Engellendi) -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" media="print" onload="this.media='all'">
+
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #ffffff; overflow-x: hidden; color: #1a1a1a; opacity: 0; transition: opacity 1s ease-in; }
-        body.loaded { opacity: 1; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #ffffff; 
+            overflow-x: hidden; 
+            color: #1a1a1a; 
+        }
         .glass { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px); }
         
         /* Custom Scrollbar */
@@ -39,117 +50,54 @@
         .service-card:hover::after { box-shadow: 0 10px 40px rgba(249, 115, 22, 0.15); }
 
         .mobile-menu { 
-            position: fixed;
-            inset: 0;
-            z-index: 100;
+            position: fixed; inset: 0; z-index: 100;
             background-color: #223B51 !important;
-            display: flex;
-            flex-direction: column;
-            padding: 2.5rem;
-            transform: translateX(100%);
-            transition: all 0.6s cubic-bezier(0.77, 0, 0.175, 1);
-            visibility: hidden;
-            opacity: 0;
+            display: flex; flex-direction: column; padding: 2.5rem;
+            transform: translateX(100%); transition: all 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+            visibility: hidden; opacity: 0;
         }
         .mobile-menu.active { 
-            transform: translateX(0);
-            visibility: visible;
-            opacity: 1;
+            transform: translateX(0); visibility: visible; opacity: 1;
         }
 
         /* Navbar active state fix for mobile rendering */
         #navbar.menu-active {
-            background: transparent !important;
-            backdrop-filter: none !important;
-            border-color: transparent !important;
+            background: transparent !important; backdrop-filter: none !important; border-color: transparent !important;
         }
         
         .mobile-link {
-            opacity: 0;
-            transform: translateX(30px);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0; transform: translateX(30px); transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .mobile-menu.active .mobile-link {
-            opacity: 1;
-            transform: translateX(0);
-        }
+        .mobile-menu.active .mobile-link { opacity: 1; transform: translateX(0); }
         .text-huge { font-size: clamp(3rem, 10vw, 6rem); line-height: 0.95; letter-spacing: -0.05em; font-weight: 800; }
 
         /* Responsive Section Spacing */
         section { padding-top: 5rem; padding-bottom: 5rem; }
-        @media (min-width: 768px) {
-            section { padding-top: 8rem; padding-bottom: 8rem; }
-        }
+        @media (min-width: 768px) { section { padding-top: 8rem; padding-bottom: 8rem; } }
 
         /* Groupomz Modern Service Card Design */
         .service-card {
-            background: #fff;
-            border-radius: 24px;
-            overflow: hidden;
+            background: #fff; border-radius: 24px; overflow: hidden;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
             transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            position: relative;
-            cursor: pointer;
-            transform-style: preserve-3d;
+            display: flex; flex-direction: column; height: 100%; position: relative; cursor: pointer; transform-style: preserve-3d;
         }
-        .service-card:hover {
-            transform: translateY(-12px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
-        }
-        .card-image-container {
-            position: relative;
-            overflow: hidden;
-            height: 400px;
-        }
-        .card-image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.8s ease;
-        }
-        .service-card:hover .card-image-container img {
-            transform: scale(1.1);
-        }
+        .service-card:hover { transform: translateY(-12px); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1); }
+        .card-image-container { position: relative; overflow: hidden; height: 400px; }
+        .card-image-container img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease; }
+        .service-card:hover .card-image-container img { transform: scale(1.1); }
         .card-overlay-content {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 24px;
+            position: absolute; bottom: 0; left: 0; right: 0; padding: 24px;
             background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%);
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            color: #ffffff;
+            display: flex; justify-content: space-between; align-items: flex-end; color: #ffffff;
         }
         .icon-box {
-            background-color: #f97316;
-            color: #fff;
-            width: 46px;
-            height: 46px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 12px;
-            font-size: 16px;
-            transition: all 0.4s ease;
-            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+            background-color: #f97316; color: #fff; width: 46px; height: 46px;
+            display: flex; justify-content: center; align-items: center; border-radius: 12px; font-size: 16px;
+            transition: all 0.4s ease; box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
         }
-        .service-card:hover .icon-box {
-            background-color: #ffffff;
-            color: #f97316;
-            transform: rotate(360deg);
-        }
-        .card-description {
-            padding: 24px;
-            color: #223B51;
-            font-size: 14px;
-            line-height: 1.6;
-            font-weight: 400;
-        }
+        .service-card:hover .icon-box { background-color: #ffffff; color: #f97316; transform: rotate(360deg); }
+        .card-description { padding: 24px; color: #223B51; font-size: 14px; line-height: 1.6; font-weight: 400; }
 
         /* Bento Grid Animation Classes */
         .parallax-el { transition: transform 0.1s ease-out; }
@@ -158,106 +106,42 @@
         .bento-reveal.show { opacity: 1; transform: translateY(0); }
         .bento-card { background-color: #ffffff; border-radius: 2.5rem; overflow: hidden; height: 100%; transition: transform 0.4s ease; }
         
-        @media (hover: hover) {
-            .bento-card:hover { transform: scale(1.01); }
-        }
-        @media (max-width: 768px) {
-            .bento-card { border-radius: 1.5rem; }
-        }
+        @media (hover: hover) { .bento-card:hover { transform: scale(1.01); } }
+        @media (max-width: 768px) { .bento-card { border-radius: 1.5rem; } }
 
         /* Hero Text Shadow Effect */
-        #home .max-w-3xl h1, #home .max-w-3xl p {
-            transition: text-shadow 0.5s ease;
-        }
-        #home .max-w-3xl:hover h1 {
-            text-shadow: 0 0 25px rgba(249, 115, 22, 0.6);
-        }
-        #home .max-w-3xl:hover p {
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
-        }
+        #home .max-w-3xl h1, #home .max-w-3xl p { transition: text-shadow 0.5s ease; }
+        #home .max-w-3xl:hover h1 { text-shadow: 0 0 25px rgba(249, 115, 22, 0.6); }
+        #home .max-w-3xl:hover p { text-shadow: 0 0 15px rgba(255, 255, 255, 0.3); }
 
         /* Modal Styles */
         .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.4s ease;
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px);
+            z-index: 1000; display: none; opacity: 0; transition: opacity 0.4s ease;
         }
-        .modal-overlay.active {
-            display: flex;
-            opacity: 1;
-        }
-        .modal-content {
-            transform: scale(0.9);
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .modal-overlay.active .modal-content {
-            transform: scale(1);
-        }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-content { transform: scale(0.9); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .modal-overlay.active .modal-content { transform: scale(1); }
 
         /* Crocist Sistem Özellikleri Styles */
         .features-grid-container {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 40px 30px;
-            max-width: 1400px;
-            width: 100%;
-            margin: 0 auto;
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px 30px; max-width: 1400px; width: 100%; margin: 0 auto;
         }
-        .feature-card {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-        }
+        .feature-card { display: flex; flex-direction: column; align-items: flex-start; }
         .feature-icon-container {
-            background-color: rgba(255, 255, 255, 0.05);
-            color: #f97316;
-            margin-bottom: 20px;
-            width: 64px;
-            height: 64px;
-            border-radius: 18px;
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.4s ease;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.05); color: #f97316; margin-bottom: 24px;
+            width: 64px; height: 64px; border-radius: 18px; display: flex; align-items: center; justify-content: center;
+            transition: all 0.4s ease; border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .feature-icon-container svg {
-            width: 42px;
-            height: 42px;
-            stroke-width: 1.5;
-        }
+        .feature-icon-container svg { width: 42px; height: 42px; stroke-width: 1.5; }
         .feature-card:hover .feature-icon-container {
-            background-color: #f97316;
-            color: #fff;
-            transform: translateY(-5px) rotate(5deg);
-            box-shadow: 0 10px 30px rgba(249, 115, 22, 0.2);
+            background-color: #f97316; color: #fff; transform: translateY(-5px) rotate(5deg); box-shadow: 0 10px 30px rgba(249, 115, 22, 0.2);
         }
         .icon-flip { transform: scaleX(-1); }
-        .feature-card h2 {
-            font-size: 22px;
-            font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 15px;
-            letter-spacing: -0.5px;
-        }
-        .feature-card p {
-            font-size: 14px;
-            color: #cbd5e1;
-            text-align: left;
-            font-weight: 400;
-        }
-        @media (max-width: 1024px) {
-            .features-grid-container { grid-template-columns: repeat(2, 1fr); gap: 40px; }
-        }
-        @media (max-width: 600px) {
-            .features-grid-container { grid-template-columns: 1fr; gap: 35px; }
-        }
+        .feature-card h2 { font-size: 22px; font-weight: 700; color: #ffffff; margin-bottom: 15px; letter-spacing: -0.5px; }
+        .feature-card p { font-size: 14px; color: #cbd5e1; text-align: left; font-weight: 400; }
+        @media (max-width: 1024px) { .features-grid-container { grid-template-columns: repeat(2, 1fr); gap: 40px; } }
+        @media (max-width: 600px) { .features-grid-container { grid-template-columns: 1fr; gap: 35px; } }
 
         /* Scroll Down Animation */
         @keyframes mouse-scroll {
@@ -266,52 +150,20 @@
             80% { transform: translateY(12px); opacity: 0; }
             100% { opacity: 0; }
         }
-        .mouse-icon {
-            width: 22px;
-            height: 38px;
-            border: 2px solid rgba(255,255,255,0.4);
-            border-radius: 12px;
-            position: relative;
-        }
+        .mouse-icon { width: 22px; height: 38px; border: 2px solid rgba(255,255,255,0.4); border-radius: 12px; position: relative; }
         .mouse-wheel {
-            width: 2px;
-            height: 6px;
-            background: #f97316;
-            position: absolute;
-            left: 50%;
-            margin-left: -1px;
-            top: 8px;
-            border-radius: 1px;
-            animation: mouse-scroll 2s infinite;
+            width: 2px; height: 6px; background: #f97316; position: absolute; left: 50%; margin-left: -1px; top: 8px; border-radius: 1px; animation: mouse-scroll 2s infinite;
         }
 
         /* Navbar Link Hover Effect */
-        .nav-link {
-            position: relative;
-            transition: color 0.3s ease;
-        }
+        .nav-link { position: relative; transition: color 0.3s ease; }
         .nav-link::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -4px;
-            left: 0;
-            background-color: #f97316;
-            transition: width 0.3s ease;
+            content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 0; background-color: #f97316; transition: width 0.3s ease;
         }
-        .nav-link:hover::after {
-            width: 100%;
-        }
+        .nav-link:hover::after { width: 100%; }
 
         /* WhatsApp Floating Button */
-        .whatsapp-float {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 1000;
-            transition: all 0.3s ease;
-        }
+        .whatsapp-float { position: fixed; bottom: 30px; right: 30px; z-index: 1000; transition: all 0.3s ease; }
         .whatsapp-float:hover { transform: scale(1.1) rotate(5deg); }
     </style>
 </head>
@@ -322,7 +174,7 @@
             <div id="navbar-container" class="flex justify-between h-22 items-center transition-all duration-300">
                 <div class="flex-shrink-0 flex items-center">
                     <a href="#home" class="flex items-center">
-                        <img id="navbar-logo" src="images/Logo.png" alt="GROUPOMZ Logo" class="h-20 w-auto transition-all duration-300">
+                        <img id="navbar-logo" src="images/Logo.png" alt="GROUPOMZ Logo" class="h-20 w-auto transition-all duration-300" width="160" height="80">
                     </a>
                 </div>
                 <!-- Desktop Menü -->
@@ -377,7 +229,6 @@
     <section id="home" class="relative w-full h-screen overflow-hidden">
         <div class="absolute inset-0 flex transition-transform duration-700 ease-in-out" id="slider-container">
 
-
             <div class="w-full flex-shrink-0 relative bg-cover bg-center" style="background-image: url('images/CamBalkon1.png');">
                 <div class="absolute inset-0 bg-black/60 flex items-center justify-center text-center p-4">
                     <div class="max-w-3xl" data-aos="fade-up" data-aos-duration="1000">
@@ -388,7 +239,8 @@
                 </div>
             </div>
 
-            <div class="w-full flex-shrink-0 relative bg-cover bg-center" style="background-image: url('images/Kaset1.png');">
+            <!-- Diğer slaytlar JS ile dinamik/lazy yüklenir -->
+            <div class="w-full flex-shrink-0 relative bg-cover bg-center" data-bg="images/Kaset1.png">
                 <div class="absolute inset-0 bg-black/60 flex items-center justify-center text-center p-4">
                     <div class="max-w-3xl" data-aos="fade-up" data-aos-duration="1000">
                         <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight">Kasetli Tente</h1>
@@ -398,7 +250,7 @@
                 </div>
             </div>
 
-            <div class="w-full flex-shrink-0 relative bg-cover bg-center" style="background-image: url('images/Elektronik1.png');">
+            <div class="w-full flex-shrink-0 relative bg-cover bg-center" data-bg="images/Elektronik1.png">
                 <div class="absolute inset-0 bg-black/60 flex items-center justify-center text-center p-4">
                     <div class="max-w-3xl" data-aos="fade-up" data-aos-duration="1000">
                         <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight">Elektronik Dekorasyon Sistemleri</h1>
@@ -408,7 +260,7 @@
                 </div>
             </div>
 
-            <div class="w-full flex-shrink-0 relative bg-cover bg-center" style="background-image: url('images/Kapi1.png');">
+            <div class="w-full flex-shrink-0 relative bg-cover bg-center" data-bg="images/Kapi1.png">
                 <div class="absolute inset-0 bg-black/60 flex items-center justify-center text-center p-4">
                     <div class="max-w-3xl" data-aos="fade-up" data-aos-duration="1000">
                         <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight">Otomatik Kapı Sistemleri</h1>
@@ -418,7 +270,7 @@
                 </div>
             </div>
             
-            <div class="w-full flex-shrink-0 relative bg-cover bg-center" style="background-image: url('images/Zip1.png');">
+            <div class="w-full flex-shrink-0 relative bg-cover bg-center" data-bg="images/Zip1.png">
                 <div class="absolute inset-0 bg-black/60 flex items-center justify-center text-center p-4">
                     <div class="max-w-3xl" data-aos="fade-up" data-aos-duration="1000">
                         <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight">Zip Perde Sistemleri</h1>
@@ -428,7 +280,7 @@
                 </div>
             </div>
 
-            <div class="w-full flex-shrink-0 relative bg-cover bg-center" style="background-image: url('images/Tavan1.png');">
+            <div class="w-full flex-shrink-0 relative bg-cover bg-center" data-bg="images/Tavan1.png">
                 <div class="absolute inset-0 bg-black/60 flex items-center justify-center text-center p-4">
                     <div class="max-w-3xl" data-aos="fade-up" data-aos-duration="1000">
                         <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight">Tavan Perde Sistemleri</h1>
@@ -438,7 +290,7 @@
                 </div>
             </div>
 
-            <div class="w-full flex-shrink-0 relative bg-cover bg-center" style="background-image: url('images/Panjur1.png');">
+            <div class="w-full flex-shrink-0 relative bg-cover bg-center" data-bg="images/Panjur1.png">
                 <div class="absolute inset-0 bg-black/60 flex items-center justify-center text-center p-4">
                     <div class="max-w-3xl" data-aos="fade-up" data-aos-duration="1000">
                         <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight">Panjur Sistemleri</h1>
@@ -448,7 +300,7 @@
                 </div>
             </div>
             
-            <div class="w-full flex-shrink-0 relative bg-cover bg-center" style="background-image: url('images/Wintent1.png');">
+            <div class="w-full flex-shrink-0 relative bg-cover bg-center" data-bg="images/Wintent1.png">
                 <div class="absolute inset-0 bg-black/60 flex items-center justify-center text-center p-4">
                     <div class="max-w-3xl" data-aos="fade-up" data-aos-duration="1000">
                         <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight">Wintent Tente </h1>
@@ -457,7 +309,6 @@
                     </div>
                 </div>
             </div>
-
 
         </div>
 
@@ -470,9 +321,7 @@
         </button>
 
         <!-- Slider Pagination Dots -->
-        <div id="slider-pagination" class="absolute bottom-24 left-12 z-20 flex space-x-3">
-            <!-- JS ile doldurulacak -->
-        </div>
+        <div id="slider-pagination" class="absolute bottom-24 left-12 z-20 flex space-x-3"></div>
 
         <!-- Scroll Down Indicator -->
         <div id="scroll-indicator" class="hidden md:flex absolute bottom-24 right-12 z-20 items-center space-x-4 pointer-events-none transition-opacity duration-500" data-aos="fade-left" data-aos-delay="1200">
@@ -486,31 +335,30 @@
         </div>
     </section>
 
-    <!-- Hizmetler Section (Eski Portfolyo) -->
     <!-- Hizmetler Section -->
     <section id="services" class="pt-12 pb-24 bg-white text-gray-900 relative overflow-hidden z-0">
         <!-- Decorative Background Elements -->
         <div class="absolute top-0 left-0 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
         <div class="absolute bottom-0 right-0 w-80 h-80 bg-[#223B51]/5 rounded-full blur-3xl translate-x-1/2 translate-y-1/2 pointer-events-none"></div>
         <div class="absolute top-1/3 right-1/4 w-40 h-40 border border-gray-200 rounded-full pointer-events-none"></div>
-        <!-- NEW Decorative Elements for Services Section -->
+        
         <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-[#223B51]/5 rounded-full blur-3xl pointer-events-none -z-10"></div>
         <div class="absolute bottom-1/4 right-1/12 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl pointer-events-none -z-10"></div>
         <div class="absolute top-1/2 left-0 w-32 h-32 bg-orange-500/2 rounded-full blur-xl -translate-x-1/2 pointer-events-none -z-10"></div>
         <div class="absolute bottom-0 left-1/3 w-40 h-40 border border-[#223B51]/10 rounded-full pointer-events-none -z-10"></div>
         <div class="absolute top-10 right-10 w-24 h-24 border-2 border-orange-500/5 rounded-[2rem] rotate-45 pointer-events-none"></div>
-        <!-- Ek Dekoratif Dokunuşlar -->
+        
         <div class="absolute top-1/2 right-0 w-64 h-64 bg-[#223B51]/3 rounded-full blur-2xl translate-x-1/2 pointer-events-none -z-10"></div>
         <div class="absolute top-[60%] left-[15%] w-48 h-px bg-gradient-to-r from-transparent via-orange-500/20 to-transparent rotate-12 pointer-events-none"></div>
         <div class="absolute top-[40%] right-[10%] w-32 h-32 border border-[#223B51]/5 rounded-full pointer-events-none"></div>
-        <!-- Large background icon -->
+        
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-gray-200/5 text-[150px] pointer-events-none z-0">
             <i class="fas fa-sun"></i>
         </div>
+        
         <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <!-- Bölüm Başlığı ve Mimari Geçiş -->
+            <!-- Bölüm Başlığı -->
             <div class="flex flex-col items-center justify-center mb-20 text-center relative" data-aos="fade-up">
-                <!-- Başlık Arkası Premium Dokunuşlar -->
                 <div class="absolute -top-10 left-1/2 -translate-x-1/2 w-full h-40 bg-orange-500/5 blur-[120px] -z-10 pointer-events-none"></div>
                 <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-24 bg-[#223B51]/3 -skew-y-2 -z-10 pointer-events-none"></div>
 
@@ -522,10 +370,9 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                 <!-- Hizmet 1 -->
                 <div class="service-card" data-aos="fade-up" data-images="images/ZipPerde1.jpeg,images/ZipPerde2.jpeg,images/ZipPerde3.jpeg">
-                    <!-- Decorative Background Decor -->
                     <div class="absolute -right-20 -top-20 w-64 h-64 bg-[#223B51]/5 rounded-full blur-3xl pointer-events-none"></div>
                     <div class="card-image-container">
-                        <img src="images/ZipPerde1.jpeg" alt="Zip Perde">
+                        <img src="images/ZipPerde1.jpeg" alt="Zip Perde" loading="lazy" width="400" height="400">
                         <div class="card-overlay-content">
                             <div class="title-group pl-2">
                                 <span class="card-tag text-[9px] font-bold uppercase tracking-[0.2em] text-white/90 mb-3">Groupomz</span>
@@ -538,10 +385,11 @@
                         <p>Özel fermuarlı ray sistemi sayesinde rüzgara karşı yüksek dayanım gösteren, dış mekanlarda ısı ve ışık kontrolü sağlayan estetik perde çözümü.</p>
                     </div>
                 </div>
+                
                 <!-- Hizmet 2 -->
                 <div class="service-card" data-aos="fade-up" data-aos-delay="100" data-images="images/GiyotinCamBalkon1.jpeg,images/GiyotinCamBalkon2.jpeg,images/GiyotinCamBalkon3.jpeg">
                     <div class="card-image-container">
-                        <img src="images/GiyotinCamBalkon1.jpeg" alt="Giyotin Cam Balkon">
+                        <img src="images/GiyotinCamBalkon1.jpeg" alt="Giyotin Cam Balkon" loading="lazy" width="400" height="400">
                         <div class="card-overlay-content">
                             <div class="title-group pl-2">
                                 <span class="card-tag text-[9px] font-bold uppercase tracking-[0.2em] text-white/90 mb-3">Groupomz</span>
@@ -554,10 +402,11 @@
                         <p>Isı yalıtımlı motorlu cam panelleri ile balkonunuzu kış bahçesine dönüştürün. Dikey hareket sistemi ile güvenli ve estetik bir kullanım sunar.</p>
                     </div>
                 </div>
+                
                 <!-- Hizmet 3 -->
                 <div class="service-card" data-aos="fade-up" data-aos-delay="200" data-images="images/KasetliTente1.jpeg,images/KasetliTente2.jpeg,images/KasetliTente3.jpeg">
                     <div class="card-image-container">
-                        <img src="images/KasetliTente1.jpeg" alt="Kasetli Tente">
+                        <img src="images/KasetliTente1.jpeg" alt="Kasetli Tente" loading="lazy" width="400" height="400">
                         <div class="card-overlay-content">
                             <div class="title-group pl-2">
                                 <span class="card-tag text-[9px] font-bold uppercase tracking-[0.2em] text-white/90 mb-3">Groupomz</span>
@@ -570,10 +419,11 @@
                         <p>Mekanizmayı ve kumaşı dış etkenlerden koruyan kapalı kaset sistemi ile uzun yıllar ilk günkü estetiğini koruyan gölgelendirme ünitesi.</p>
                     </div>
                 </div>
+                
                 <!-- Hizmet 4 -->
                 <div class="service-card" data-aos="fade-up" data-images="images/ElektronikDekorasyon1.jpeg,images/ElektronikDekorasyon2.jpeg,images/ElektronikDekorasyon3.jpeg,images/ElektronikDekorasyon4.jpeg,images/ElektronikDekorasyon5.jpeg">
                     <div class="card-image-container">
-                        <img src="images/ElektronikDekorasyon1.jpeg" alt="Elektronik Dekorasyon">
+                        <img src="images/ElektronikDekorasyon1.jpeg" alt="Elektronik Dekorasyon" loading="lazy" width="400" height="400">
                         <div class="card-overlay-content">
                             <div class="title-group pl-2">
                                 <span class="card-tag text-[9px] font-bold uppercase tracking-[0.2em] text-white/90 mb-3">Groupomz</span>
@@ -586,10 +436,11 @@
                         <p>Yaşam alanlarınıza teknoloji ve konfor katan, uzaktan kumandalı veya akıllı otomasyon destekli modern dekoratif mekanizmalar.</p>
                     </div>
                 </div>
+                
                 <!-- Hizmet 5 -->
                 <div class="service-card" data-aos="fade-up" data-aos-delay="100" data-images="images/OtomatikKapi1.jpeg,images/OtomatikKapi2.jpeg,images/OtomatikKapi3.jpeg">
                     <div class="card-image-container">
-                        <img src="images/OtomatikKapi1.jpeg" alt="Otomatik Kapı">
+                        <img src="images/OtomatikKapi1.jpeg" alt="Otomatik Kapı" loading="lazy" width="400" height="400">
                         <div class="card-overlay-content">
                             <div class="title-group pl-2">
                                 <span class="card-tag text-[9px] font-bold uppercase tracking-[0.2em] text-white/90 mb-3">Groupomz</span>
@@ -599,13 +450,14 @@
                         </div>
                     </div>
                     <div class="card-description">
-                        <p>Fotoselli, radar sensörlü ve yüksek güvenlikli giriş çözümleri ile mağaza, ofis ve binalarda konforlu ve hijyenik geçiş imkanı.</p>
+                        <p>Fotoselli, radar sensörlü ve guessing sistemi yüksek güvenlikli giriş çözümleri ile mağaza, ofis ve binalarda konforlu ve hijyenik geçiş imkanı.</p>
                     </div>
                 </div>
+                
                 <!-- Hizmet 6 -->
                 <div class="service-card" data-aos="fade-up" data-aos-delay="200" data-images="images/Panjur1.jpeg,images/Panjur2.jpeg,images/Panjur3.jpeg">
                     <div class="card-image-container">
-                        <img src="images/Panjur1.jpeg" alt="Otomatik Panjur">
+                        <img src="images/Panjur1.jpeg" alt="Otomatik Panjur" loading="lazy" width="400" height="400">
                         <div class="card-overlay-content">
                             <div class="title-group pl-2">
                                 <span class="card-tag text-[9px] font-bold uppercase tracking-[0.2em] text-white/90 mb-3">Groupomz</span>
@@ -618,10 +470,11 @@
                         <p>Poliüretan dolgulu lamelleri ile üstün ısı ve ses yalıtımı sunan, aynı zamanda güvenliğinizi en üst seviyeye çıkaran motorlu panjur sistemleri.</p>
                     </div>
                 </div>
+                
                 <!-- Hizmet 7 -->
                 <div class="service-card" data-aos="fade-up" data-images="images/TavanPerdesi1.jpeg,images/TavanPerdesi2.jpeg,images/TavanPerdesi3.jpeg">
                     <div class="card-image-container">
-                        <img src="images/TavanPerdesi1.jpeg" alt="Tavan Perdesi">
+                        <img src="images/TavanPerdesi1.jpeg" alt="Tavan Perdesi" loading="lazy" width="400" height="400">
                         <div class="card-overlay-content">
                             <div class="title-group pl-2">
                                 <span class="card-tag text-[9px] font-bold uppercase tracking-[0.2em] text-white/90 mb-3">Groupomz</span>
@@ -634,12 +487,12 @@
                         <p>Cam tavanlı kış bahçeleri ve teras alanlarında güneşin yakıcı etkisini kıran, içeriye ferah bir atmosfer kazandıran özel tavan storları.</p>
                     </div>
                 </div>
+                
                 <!-- Hizmet 8 -->
                 <div class="service-card" data-aos="fade-up" data-aos-delay="100" data-images="images/Wintent1.jpeg,images/Wintent2.jpeg,images/Wintent3.jpeg">
-                    <!-- Decorative Background Decor -->
                     <div class="absolute -left-20 -bottom-20 w-64 h-64 bg-[#223B51]/5 rounded-full blur-3xl pointer-events-none"></div>
                     <div class="card-image-container">
-                        <img src="images/Wintent1.jpeg" alt="Wintent Tente">
+                        <img src="images/Wintent1.jpeg" alt="Wintent Tente" loading="lazy" width="400" height="400">
                         <div class="card-overlay-content">
                             <div class="title-group pl-2">
                                 <span class="card-tag text-[9px] font-bold uppercase tracking-[0.2em] text-white/90 mb-3">Groupomz</span>
@@ -658,11 +511,9 @@
 
     <!-- Bento Grid Section -->
     <section id="bento-features" class="py-24 bg-[#223B51] text-white relative overflow-hidden z-0">
-        <!-- Bento Section Decorative Elements -->
         <div class="absolute top-0 right-0 w-1/2 h-full bg-white/5 -skew-x-12 transform translate-x-1/4 pointer-events-none"></div>
         <div class="absolute bottom-0 left-0 w-1/3 h-1/2 bg-orange-500/5 skew-x-12 transform -translate-x-1/4 pointer-events-none"></div>
         
-        <!-- Large Background Icons for Bento Text Blocks -->
         <div class="absolute top-[15%] right-[10%] text-white/5 text-[200px] pointer-events-none -z-10">
             <i class="fas fa-shield-alt"></i>
         </div>
@@ -672,11 +523,10 @@
 
         <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-stretch">
-                
-                <!-- Card 1: Wintent (Sol Üst) -->
+                <!-- Card 1: Wintent -->
                 <div class="bento-reveal" data-bento>
                     <div class="bento-card">
-                        <div class="h-[400px]"><img src="images/Wintent1.jpeg" alt="Wintent" class="w-full h-full object-cover"></div>
+                        <div class="h-[400px]"><img src="images/Wintent1.jpeg" alt="Wintent" class="w-full h-full object-cover" loading="lazy" width="600" height="400"></div>
                         <div class="p-10 text-[#223B51]">
                             <h3 class="text-2xl font-bold mb-4 uppercase tracking-tighter">Wintent Tente</h3>
                             <p class="text-[#223B51]/80 mb-6 leading-relaxed font-medium">Pencerelerinize değer katan, fonksiyonel ve estetik gölgelendirme çözümleri sunuyoruz.</p>
@@ -685,7 +535,7 @@
                     </div>
                 </div>
 
-                <!-- Header Block (Sağ Üst) -->
+                <!-- Header Block -->
                 <div class="flex flex-col justify-center p-10 bento-reveal" data-bento>
                     <div class="flex items-center space-x-4 mb-6">
                         <div class="w-10 h-10 bg-orange-500/10 rounded-xl flex items-center justify-center"><i class="fas fa-shield-alt text-orange-500"></i></div>
@@ -695,10 +545,10 @@
                     <p class="mt-6 text-slate-300 text-lg">Groupomz olarak teknolojiyi estetikle harmanlıyoruz.</p>
                 </div>
 
-                <!-- Card 2: Tavan Perdesi (Sol Orta) -->
+                <!-- Card 2: Tavan Perdesi -->
                 <div class="bento-reveal" data-bento>
                     <div class="bento-card">
-                        <div class="h-[400px]"><img src="images/TavanPerdesi1.jpeg" alt="Tavan Perdesi" class="w-full h-full object-cover"></div>
+                        <div class="h-[400px]"><img src="images/TavanPerdesi1.jpeg" alt="Tavan Perdesi" class="w-full h-full object-cover" loading="lazy" width="600" height="400"></div>
                         <div class="p-10 text-[#223B51]">
                             <h3 class="text-2xl font-bold mb-4 uppercase tracking-tighter">Tavan Perdesi</h3>
                             <p class="text-[#223B51]/80 mb-6 leading-relaxed font-medium">Kış bahçeleri için mükemmel ısı ve ışık kontrolü sağlayan profesyonel sistemler.</p>
@@ -706,10 +556,10 @@
                     </div>
                 </div>
 
-                <!-- Card 3: Panjur (Sağ Orta) -->
+                <!-- Card 3: Panjur -->
                 <div class="bento-reveal" data-bento>
                     <div class="bento-card">
-                        <div class="h-[400px]"><img src="images/Panjur1.jpeg" alt="Panjur" class="w-full h-full object-cover"></div>
+                        <div class="h-[400px]"><img src="images/Panjur1.jpeg" alt="Panjur" class="w-full h-full object-cover" loading="lazy" width="600" height="400"></div>
                         <div class="p-10 text-[#223B51]">
                             <h3 class="text-2xl font-bold mb-4 uppercase tracking-tighter">Otomatik Panjur</h3>
                             <p class="text-[#223B51]/80 mb-6 leading-relaxed font-medium">Güvenlik ve yalıtımı bir arada sunan akıllı panjur teknolojileri ile huzurlu yaşam alanları.</p>
@@ -717,7 +567,7 @@
                     </div>
                 </div>
 
-                <!-- Vision Block (Sol Alt) -->
+                <!-- Vision Block -->
                 <div class="flex flex-col justify-center p-10 bento-reveal text-right" data-bento>
                     <div class="flex items-center justify-end space-x-4 mb-6">
                         <span class="text-orange-500 font-bold uppercase tracking-[0.4em] text-[10px] italic">Vizyonumuz</span>
@@ -726,10 +576,10 @@
                     <h2 class="text-4xl md:text-5xl font-black uppercase tracking-tighter leading-tight">Geleceğin teknolojisini estetik tasarımlarla buluşturuyoruz.</h2>
                 </div>
 
-                <!-- Card 4: Giyotin Cam (Sağ Alt) -->
+                <!-- Card 4: Giyotin Cam -->
                 <div class="bento-reveal" data-bento>
                     <div class="bento-card">
-                        <div class="h-[400px]"><img src="images/GiyotinCamBalkon1.jpeg" alt="Giyotin Cam" class="w-full h-full object-cover"></div>
+                        <div class="h-[400px]"><img src="images/GiyotinCamBalkon1.jpeg" alt="Giyotin Cam" class="w-full h-full object-cover" loading="lazy" width="600" height="400"></div>
                         <div class="p-10 text-[#223B51]">
                             <h3 class="text-2xl font-bold mb-4 uppercase tracking-tighter">Giyotin Cam</h3>
                             <p class="text-[#223B51]/80 mb-6 leading-relaxed font-medium">Dikey hareket eden motorlu paneller ile manzaranızı kesintisiz koruyun ve alan kazanın.</p>
@@ -750,12 +600,11 @@
 
     <!-- Crocist Sistem Özellikleri Section -->
     <section id="system-features" class="py-24 relative overflow-hidden" style="background-color: #223B51;">
-        <!-- Decorative Background Element -->
         <div class="absolute top-0 left-0 w-1/2 h-full bg-white/5 -skew-x-12 transform -translate-x-1/4 pointer-events-none"></div>
         <div class="absolute bottom-0 right-0 w-1/3 h-1/2 bg-orange-500/5 skew-x-12 transform translate-x-1/4 pointer-events-none"></div>
         <div class="absolute top-1/4 left-1/4 w-24 h-24 bg-orange-500/10 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute bottom-1/4 right-1/4 w-32 h-32 border-2 border-white/10 rounded-full pointer-events-none"></div>
-        <!-- Large background icon -->
+        
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white/5 text-[150px] pointer-events-none z-0">
             <i class="fas fa-cogs"></i>
         </div>
@@ -841,7 +690,6 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div class="order-2 lg:order-1 flex justify-center relative py-10" data-aos="fade-right">
-                    <!-- Dekoratif Geometrik Çizimler -->
                     <div class="absolute -z-10 w-72 h-72 bg-orange-500/10 rounded-full -top-10 -left-10 blur-3xl parallax-el" data-speed="0.05"></div>
                     <div class="absolute -z-10 w-48 h-48 border-2 border-[#223B51]/10 rounded-[3rem] top-1/4 -right-10 rotate-12 parallax-el" data-speed="0.12"></div>
                     <div class="absolute -z-10 w-32 h-32 dots-pattern opacity-30 bottom-10 -left-5 parallax-el" data-speed="0.08"></div>
@@ -849,7 +697,7 @@
                     <div class="absolute -z-10 w-40 h-40 bg-[#223B51]/5 rounded-full -bottom-10 -right-10 blur-2xl parallax-el" data-speed="0.07"></div>
                     <div class="absolute -z-10 w-20 h-20 border-2 border-orange-500/10 rounded-full top-0 left-0 parallax-el" data-speed="0.10"></div>
                     
-                    <img src="images/Ucretsiz.png" alt="Ücretsiz Keşif" class="w-full max-w-lg h-auto rounded-[2.5rem] shadow-2xl relative z-10">
+                    <img src="images/Ucretsiz.png" alt="Ücretsiz Keşif" class="w-full max-w-lg h-auto rounded-[2.5rem] shadow-2xl relative z-10" loading="lazy" width="500" height="500">
                 </div>
                 <div class="order-1 lg:order-2 bg-gray-50 p-8 md:p-12 rounded-[2.5rem] shadow-sm border border-gray-100" data-aos="fade-left">
                     <form id="discovery-form" class="grid grid-cols-1 md:grid-cols-2 gap-6 relative">
@@ -860,8 +708,6 @@
                         <div class="space-y-2">
                             <label class="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-2">Telefon Numaranız *</label>
                             <input type="tel" id="form-phone" name="phone" placeholder="5xx xxx xx xx" maxlength="10" inputmode="numeric" class="w-full bg-white border border-gray-200 rounded-2xl px-6 py-4 outline-none focus:border-orange-500 transition shadow-sm" required>
-
-
                         </div>
                         <div class="space-y-2">
                             <label class="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-2">E-posta Adresiniz</label>
@@ -874,12 +720,12 @@
                                 <option value="Zip Perde">Zip Perde</option>
                                 <option value="Bioklimatik Pergola">Bioklimatik Pergola</option>
                                 <option value="Giyotin Cam">Giyotin Cam</option>
-                                <option>Sürme Cam Sistemleri</option>
-                                <option>Katlanır Cam Balkon</option>
-                                <option>Rolling Roof</option>
-                                <option>Kasetli Tente</option>
-                                <option>Wintent Sistemleri</option>
-                                <option>Kış Bahçesi</option>
+                                <option value="Sürme Cam Sistemleri">Sürme Cam Sistemleri</option>
+                                <option value="Katlanır Cam Balkon">Katlanır Cam Balkon</option>
+                                <option value="Rolling Roof">Rolling Roof</option>
+                                <option value="Kasetli Tente">Kasetli Tente</option>
+                                <option value="Wintent Sistemleri">Wintent Sistemleri</option>
+                                <option value="Kış Bahçesi">Kış Bahçesi</option>
                                 <option value="Diğer">Diğer</option>
                             </select>
                         </div>
@@ -892,7 +738,6 @@
                                 <span id="btn-text">Keşif Talebi Gönder</span>
                             </button>
                         </div>
-                        <!-- Form Durum Mesajları -->
                         <div id="form-status" class="md:col-span-2 mt-4 hidden text-center font-bold uppercase tracking-widest text-[11px]"></div>
                     </form>
                 </div>
@@ -902,15 +747,14 @@
 
     <!-- Footer / İletişim Section -->
     <footer id="contact" class="bg-[#223B51] text-white pt-32 pb-12 relative overflow-hidden">
-        <!-- Arka Plan Dekoratif Işık -->
         <div class="absolute top-0 right-0 w-1/2 h-full bg-orange-500/5 -skew-x-12 transform translate-x-1/4 pointer-events-none"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
                 
-                <!-- Sol Sütun: Marka & İletişim (5 Kolon) -->
+                <!-- Sol Sütun: Marka & İletişim -->
                 <div class="lg:col-span-5" data-aos="fade-up">
-                    <img src="images/Logo.png" alt="Groupomz Logo" class="h-16 w-auto mb-10 opacity-90">
+                    <img src="images/Logo.png" alt="Groupomz Logo" class="h-16 w-auto mb-10 opacity-90" loading="lazy" width="130" height="64">
                     <h2 class="text-4xl md:text-5xl font-extrabold mb-8 uppercase tracking-tighter leading-[1.1]">
                         Projeleriniz İçin <br><span class="text-orange-500 italic">Çözüm Ortağınız.</span>
                     </h2>
@@ -934,7 +778,7 @@
                     </div>
 
                     <div class="flex space-x-3">
-                        <a href="#" class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center hover:bg-orange-500 transition-all duration-500 group">
+                        <a href="https://www.instagram.com/groupomz" class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center hover:bg-orange-500 transition-all duration-500 group">
                             <i class="fab fa-instagram group-hover:scale-110"></i>
                         </a>
                         <a href="#" class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center hover:bg-[#1877F2] transition-all duration-500 group">
@@ -946,7 +790,7 @@
                     </div>
                 </div>
 
-                <!-- Orta Sütun: Hızlı Menü (2 Kolon) -->
+                <!-- Orta Sütun: Hızlı Menü -->
                 <div class="lg:col-span-2 mt-4" data-aos="fade-up" data-aos-delay="100">
                     <h4 class="text-orange-500 font-bold uppercase tracking-[0.3em] text-[11px] mb-10">Hızlı Menü</h4>
                     <ul class="space-y-5">
@@ -957,7 +801,7 @@
                     </ul>
                 </div>
 
-                <!-- Sağ Sütun: Süreç Kartı (5 Kolon) -->
+                <!-- Sağ Sütun: Süreç Kartı -->
                 <div class="lg:col-span-5" data-aos="fade-left">
                     <div class="bg-white/5 p-10 rounded-[3rem] border border-white/10 relative overflow-hidden group">
                         <div class="absolute top-0 right-0 p-8 opacity-5">
@@ -994,7 +838,7 @@
                 </div>
             </div>
 
-            <!-- Alt Footer (Copyright) -->
+            <!-- Alt Footer -->
             <div class="mt-24 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 text-[10px] font-bold uppercase tracking-[0.3em] text-slate-500">
                 <p>&copy; 2024 GROUPOMZ. TÜM HAKLARI SAKLIDIR.</p>
                 <div class="flex space-x-8">
@@ -1006,7 +850,7 @@
     </footer>
 
     <!-- WhatsApp Floating Button -->
-    <a href="https://wa.me/905397724528" target="_blank" class="whatsapp-float">
+    <a href="https://wa.me/905397724528" target="_blank" class="whatsapp-float" aria-label="WhatsApp üzerinden iletişim kurun">
         <div class="w-16 h-16 bg-[#25D366] rounded-2xl flex items-center justify-center text-white text-3xl shadow-2xl shadow-green-500/30">
             <i class="fab fa-whatsapp"></i>
         </div>
@@ -1015,7 +859,7 @@
     <!-- Hizmet Detay Modalı -->
     <div id="service-modal" class="modal-overlay items-center justify-center p-4">
         <div class="modal-content bg-white w-full max-w-4xl rounded-[2.5rem] overflow-hidden relative flex flex-col md:flex-row shadow-2xl">
-            <button id="close-modal" class="absolute top-6 right-6 z-[110] bg-black/20 hover:bg-black/40 text-white w-10 h-10 rounded-full flex items-center justify-center transition backdrop-blur-md">
+            <button id="close-modal" class="absolute top-6 right-6 z-[110] bg-black/20 hover:bg-black/40 text-white w-10 h-10 rounded-full flex items-center justify-center transition backdrop-blur-md" aria-label="Kapat">
                 <i class="fas fa-times"></i>
             </button>
             <div class="md:w-1/2 h-[300px] md:h-[500px] relative overflow-hidden">
@@ -1044,378 +888,328 @@
         </div>
     </div>
 
-    <!-- AOS Script -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <!-- fslightbox Script (Büyütme/Küçültme için) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fslightbox/3.0.9/index.min.js"></script>
-    <!-- Vanilla Tilt Script (3D Efekt için) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
+    <!-- Scriptler Erteleme Özelliği İle Sayfa Sonunda Çalıştırılır -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js" defer></script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" defer></script>
+
     <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // EmailJS Init
+        if (typeof emailjs !== 'undefined') {
+            emailjs.init("u94mKeq4R_A1Cu_l8"); 
+        }
 
-        
+        // Discovery Form
+        const discoveryForm = document.getElementById('discovery-form');
+        if (discoveryForm) {
+            discoveryForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const btn = this.querySelector('button');
+                btn.disabled = true;
+                btn.innerText = 'Gönderiliyor...';
 
-    // 1. EmailJS'i Başlat (Public Key'in buraya gelecek)
-
-    (function() {
-
-        emailjs.init("u94mKeq4R_A1Cu_l8"); 
-
-    })();
-
-
-
-    // 2. Form Gönderim İşlemi
-
-    const discoveryForm = document.getElementById('discovery-form');
-
-
-
-    discoveryForm.addEventListener('submit', function(event) {
-
-        event.preventDefault(); // Sayfanın yenilenmesini engeller
-
-
-
-        // Butonu "Gönderiliyor..." yapalım (isteğe bağlı ama profesyonel görünür)
-
-        const btn = this.querySelector('button');
-
-        btn.innerText = 'Gönderiliyor...';
-
-
-
-        // 3. EmailJS'e gönder
-
-        emailjs.sendForm('service_xfoap5b', 'template_sji0p9a', this)
-
-            .then(function() {
-
-                alert('Talebiniz başarıyla alındı, teşekkürler!');
-
-                discoveryForm.reset(); // Formu temizle
-
-                btn.innerText = 'Keşif Talebi Gönder';
-
-            }, function(error) {
-
-                alert('Bir hata oluştu, lütfen tekrar deneyin.');
-
-                console.log('Hata:', error);
-
-                btn.innerText = 'Keşif Talebi Gönder';
-
+                emailjs.sendForm('service_xfoap5b', 'template_sji0p9a', this)
+                    .then(() => {
+                        alert('Talebiniz başarıyla alındı, teşekkürler!');
+                        discoveryForm.reset();
+                        btn.disabled = false;
+                        btn.innerText = 'Keşif Talebi Gönder';
+                    }, (error) => {
+                        alert('Bir hata oluştu, lütfen tekrar deneyin.');
+                        console.error('Hata:', error);
+                        btn.disabled = false;
+                        btn.innerText = 'Keşif Talebi Gönder';
+                    });
             });
+        }
 
+        // External Scripts Initialization
+        window.addEventListener('load', () => {
+            if (typeof AOS !== 'undefined') {
+                AOS.init({ duration: 800, once: true, easing: 'ease-out-quad' });
+            }
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
     });
 
-        // Navbar Kaydırma Efekti
-        window.onload = () => {
-            document.body.classList.add('loaded');
-        };
+    // Slider ve Arka Plan Lazy-loading Mantığı
+    const sliderContainer = document.getElementById('slider-container');
+    const prevButton = document.getElementById('prev-slide');
+    const nextButton = document.getElementById('next-slide');
+    const pagination = document.getElementById('slider-pagination');
+    const slides = sliderContainer.children;
+    let currentSlide = 0;
+    let autoSlideTimer;
 
-        const navbar = document.getElementById('navbar');
-        const navbarContainer = document.getElementById('navbar-container');
-        const navbarLogo = document.getElementById('navbar-logo');
-        const mobileIcon = document.getElementById('mobile-icon');
-        const scrollIndicator = document.getElementById('scroll-indicator');
+    function loadSlideBg(slideElement) {
+        if (!slideElement) return;
+        const bgUrl = slideElement.getAttribute('data-bg');
+        if (bgUrl) {
+            slideElement.style.backgroundImage = `url('${bgUrl}')`;
+            slideElement.removeAttribute('data-bg');
+        }
+    }
+
+    function showSlide(index) {
+        if (index < 0) {
+            currentSlide = slides.length - 1;
+        } else if (index >= slides.length) {
+            currentSlide = 0;
+        } else {
+            currentSlide = index;
+        }
+
+        // Aktif slayt ve bir sonraki slaytın arka planını ihtiyaç anında yükle
+        loadSlideBg(slides[currentSlide]);
+        if (slides[currentSlide + 1]) loadSlideBg(slides[currentSlide + 1]);
+
+        sliderContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+        updateDots();
+    }
+
+    function createDots() {
+        Array.from(slides).forEach((_, i) => {
+            const dot = document.createElement('button');
+            dot.className = `w-2 h-2 rounded-full bg-white/30 transition-all duration-500 hover:bg-white/60`;
+            dot.onclick = () => {
+                showSlide(i);
+                startAutoSlide();
+            };
+            pagination.appendChild(dot);
+        });
+        updateDots();
+    }
+
+    function updateDots() {
+        const dots = pagination.children;
+        Array.from(dots).forEach((dot, i) => {
+            const isActive = i === currentSlide;
+            dot.className = isActive 
+                ? 'w-8 h-2 rounded-full bg-orange-500 transition-all duration-500' 
+                : 'w-2 h-2 rounded-full bg-white/30 transition-all duration-500 hover:bg-white/60';
+        });
+    }
+
+    function startAutoSlide() {
+        stopAutoSlide();
+        autoSlideTimer = setInterval(() => { showSlide(currentSlide + 1); }, 5000);
+    }
+
+    function stopAutoSlide() {
+        if (autoSlideTimer) clearInterval(autoSlideTimer);
+    }
+
+    prevButton.addEventListener('click', () => { showSlide(currentSlide - 1); startAutoSlide(); });
+    nextButton.addEventListener('click', () => { showSlide(currentSlide + 1); startAutoSlide(); });
+
+    // Swipe Desteği
+    let touchStartX = 0;
+    let touchEndX = 0;
+    sliderContainer.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+    sliderContainer.addEventListener('touchend', e => {
+        touchEndX = e.changedTouches[0].screenX;
+        if (touchStartX - touchEndX > 50) showSlide(currentSlide + 1);
+        else if (touchEndX - touchStartX > 50) showSlide(currentSlide - 1);
+        startAutoSlide();
+    }, { passive: true });
+
+    createDots();
+    startAutoSlide();
+
+    // Navbar Kaydırma Efekti
+    const navbar = document.getElementById('navbar');
+    const navbarContainer = document.getElementById('navbar-container');
+    const navbarLogo = document.getElementById('navbar-logo');
+    const mobileIcon = document.getElementById('mobile-icon');
+    const scrollIndicator = document.getElementById('scroll-indicator');
+
+    window.addEventListener('scroll', () => {
+        const scroll = window.scrollY;
+
+        const heroContent = document.querySelectorAll('#home .max-w-3xl');
+        heroContent.forEach(el => {
+            el.style.transform = `translateY(${scroll * 0.3}px)`;
+            el.style.opacity = 1 - (scroll / 600);
+        });
+
+        if (scrollIndicator) scrollIndicator.style.opacity = 1 - (scroll / 300);
+
+        if (scroll > 50) {
+            navbar.classList.add('glass', 'shadow-sm', 'border-gray-100', 'text-gray-900');
+            navbar.classList.remove('border-transparent', 'text-white');
+            navbarContainer.classList.replace('h-22', 'h-14');
+            navbarLogo.classList.replace('h-20', 'h-10');
+            mobileIcon.classList.add('text-black');
+            mobileIcon.classList.remove('text-white');
+        } else {
+            navbar.classList.remove('glass', 'shadow-sm', 'border-gray-100', 'text-gray-900');
+            navbar.classList.add('border-transparent', 'text-white');
+            navbarContainer.classList.replace('h-14', 'h-22');
+            navbarLogo.classList.replace('h-10', 'h-20');
+            mobileIcon.classList.add('text-white');
+            mobileIcon.classList.remove('text-black');
+        }
+    }, { passive: true });
+
+    // Mobil Menü İşlemleri
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    mobileMenuButton.addEventListener('click', () => {
+        const isActive = mobileMenu.classList.toggle('active');
+        navbar.classList.toggle('menu-active', isActive);
+        mobileIcon.classList.toggle('fa-ellipsis-v', !isActive);
+        mobileIcon.classList.toggle('fa-times', isActive);
         
-        window.addEventListener('scroll', () => {
-            const scroll = window.scrollY;
+        if (isActive) {
+            mobileIcon.classList.add('text-white');
+            mobileIcon.classList.remove('text-black');
+            document.body.style.overflow = 'hidden';
+        } else {
+            if (window.scrollY > 50) mobileIcon.classList.add('text-black');
+            else mobileIcon.classList.add('text-white');
+            document.body.style.overflow = '';
+        }
+    });
 
-            // Hero Parallax & Fade Effect
-            const heroContent = document.querySelectorAll('#home .max-w-3xl');
-            heroContent.forEach(el => {
-                el.style.transform = `translateY(${scroll * 0.3}px)`;
-                el.style.opacity = 1 - (scroll / 600);
-            });
-
-            if (scrollIndicator) scrollIndicator.style.opacity = 1 - (scroll / 300);
+    const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+    mobileMenuLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+            navbar.classList.remove('menu-active');
+            mobileIcon.classList.add('fa-ellipsis-v');
+            mobileIcon.classList.remove('fa-times');
+            document.body.style.overflow = '';
 
             if (window.scrollY > 50) {
-                navbar.classList.add('glass', 'shadow-sm', 'border-gray-100', 'text-gray-900');
-                navbar.classList.remove('border-transparent', 'text-white');
-                navbarContainer.classList.replace('h-22', 'h-14');
-                navbarLogo.classList.replace('h-20', 'h-10');
                 mobileIcon.classList.add('text-black');
                 mobileIcon.classList.remove('text-white');
             } else {
-                navbar.classList.remove('glass', 'shadow-sm', 'border-gray-100', 'text-gray-900');
-                navbar.classList.add('border-transparent', 'text-white');
-                navbarContainer.classList.replace('h-14', 'h-22');
-                navbarLogo.classList.replace('h-10', 'h-20');
                 mobileIcon.classList.add('text-white');
                 mobileIcon.classList.remove('text-black');
             }
         });
+    });
 
-        // Mobil menü açma/kapama işlevi
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
+    // Service Modal Logic
+    const modal = document.getElementById('service-modal');
+    const closeModalBtn = document.getElementById('close-modal');
+    const modalPrevBtn = document.getElementById('modal-prev');
+    const modalNextBtn = document.getElementById('modal-next');
+    const modalPagination = document.getElementById('modal-pagination');
+    let modalImages = [];
+    let currentModalIdx = 0;
 
-        mobileMenuButton.addEventListener('click', () => {
-            const isActive = mobileMenu.classList.toggle('active');
-            navbar.classList.toggle('menu-active', isActive);
-            mobileIcon.classList.toggle('fa-ellipsis-v', !isActive);
-            mobileIcon.classList.toggle('fa-times', isActive);
-            
-            if (isActive) {
-                mobileIcon.classList.add('text-white');
-                mobileIcon.classList.remove('text-black');
-                document.body.style.overflow = 'hidden';
-            } else {
-                if (window.scrollY > 50) mobileIcon.classList.add('text-black');
-                else mobileIcon.classList.add('text-white');
-                document.body.style.overflow = '';
-            }
-        });
-
-        // Menü linklerine tıklandığında menüyü kapat
-        const mobileMenuLinks = mobileMenu.querySelectorAll('a');
-        mobileMenuLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.remove('active');
-                navbar.classList.remove('menu-active');
-                mobileIcon.classList.add('fa-ellipsis-v');
-                mobileIcon.classList.remove('fa-times');
-                document.body.style.overflow = '';
-
-                // İkon rengini mevcut scroll durumuna göre ayarla
-                if (window.scrollY > 50) {
-                    mobileIcon.classList.add('text-black');
-                    mobileIcon.classList.remove('text-white');
-                } else {
-                    mobileIcon.classList.add('text-white');
-                    mobileIcon.classList.remove('text-black');
-                }
-            });
-        });
-
-        // AOS Başlatma
-        AOS.init({
-            duration: 800,
-            once: false,
-            easing: 'ease-out-quad'
-        });
+    function openModal(card) {
+        const title = card.querySelector('h2').innerText;
+        const iconClass = card.querySelector('.icon-box i').className;
+        const desc = card.querySelector('.card-description p').innerText;
         
-        // Lucide Icons Initializer
-        lucide.createIcons();
+        const dataImages = card.getAttribute('data-images');
+        modalImages = dataImages ? dataImages.split(',') : [card.querySelector('img').src];
+        currentModalIdx = 0;
 
-        // Modal Logic
-        const modal = document.getElementById('service-modal');
-        const closeModalBtn = document.getElementById('close-modal');
-        const modalPrevBtn = document.getElementById('modal-prev');
-        const modalNextBtn = document.getElementById('modal-next');
-        const modalPagination = document.getElementById('modal-pagination');
-        let modalImages = [];
-        let currentModalIdx = 0;
+        document.getElementById('modal-title').innerText = title;
+        document.getElementById('modal-icon').className = iconClass;
+        document.getElementById('modal-text').innerText = desc;
 
-        function openModal(card) {
-            const title = card.querySelector('h2').innerText;
-            const iconClass = card.querySelector('.icon-box i').className;
-            const desc = card.querySelector('.card-description p').innerText;
-            
-            // data-images varsa al, yoksa sadece ana resmi diziye koy
-            const dataImages = card.getAttribute('data-images');
-            modalImages = dataImages ? dataImages.split(',') : [card.querySelector('img').src];
-            currentModalIdx = 0;
+        updateModalImage(0);
+        createModalDots();
 
-            document.getElementById('modal-title').innerText = title;
-            document.getElementById('modal-icon').className = iconClass;
-            document.getElementById('modal-text').innerText = desc;
+        modal.style.display = 'flex';
+        setTimeout(() => modal.classList.add('active'), 10);
+        document.body.style.overflow = 'hidden';
+    }
 
-            updateModalImage(0);
-            createModalDots();
+    function updateModalImage(idx) {
+        currentModalIdx = idx;
+        const modalImg = document.getElementById('modal-image');
+        modalImg.style.opacity = '0';
+        setTimeout(() => {
+            modalImg.src = modalImages[idx];
+            modalImg.style.opacity = '1';
+        }, 200);
+        updateModalDots();
+    }
 
-            modal.style.display = 'flex';
-            setTimeout(() => modal.classList.add('active'), 10);
-            document.body.style.overflow = 'hidden';
+    function createModalDots() {
+        modalPagination.innerHTML = '';
+        if (modalImages.length <= 1) {
+            modalPrevBtn.style.display = 'none';
+            modalNextBtn.style.display = 'none';
+            return;
         }
+        modalPrevBtn.style.display = 'flex';
+        modalNextBtn.style.display = 'flex';
 
-        function updateModalImage(idx) {
-            currentModalIdx = idx;
-            const modalImg = document.getElementById('modal-image');
-            modalImg.style.opacity = '0';
-            setTimeout(() => {
-                modalImg.src = modalImages[idx];
-                modalImg.style.opacity = '1';
-            }, 200);
-            updateModalDots();
-        }
-
-        function createModalDots() {
-            modalPagination.innerHTML = '';
-            if (modalImages.length <= 1) {
-                modalPrevBtn.style.display = 'none';
-                modalNextBtn.style.display = 'none';
-                return;
-            }
-            modalPrevBtn.style.display = 'flex';
-            modalNextBtn.style.display = 'flex';
-
-            modalImages.forEach((_, i) => {
-                const dot = document.createElement('button');
-                dot.className = `w-2 h-2 rounded-full transition-all duration-300 ${i === 0 ? 'bg-orange-500 w-4' : 'bg-white/50'}`;
-                dot.onclick = () => updateModalImage(i);
-                modalPagination.appendChild(dot);
-            });
-        }
-
-        function updateModalDots() {
-            const dots = modalPagination.children;
-            Array.from(dots).forEach((dot, i) => {
-                dot.className = i === currentModalIdx 
-                    ? 'w-4 h-2 rounded-full bg-orange-500 transition-all duration-300' 
-                    : 'w-2 h-2 rounded-full bg-white/50 transition-all duration-300';
-            });
-        }
-
-        function prevModalImage() {
-            let newIdx = currentModalIdx - 1;
-            if (newIdx < 0) newIdx = modalImages.length - 1;
-            updateModalImage(newIdx);
-        }
-
-        function nextModalImage() {
-            let newIdx = currentModalIdx + 1;
-            if (newIdx >= modalImages.length) newIdx = 0;
-            updateModalImage(newIdx);
-        }
-
-        modalPrevBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            prevModalImage();
+        modalImages.forEach((_, i) => {
+            const dot = document.createElement('button');
+            dot.className = `w-2 h-2 rounded-full transition-all duration-300 ${i === 0 ? 'bg-orange-500 w-4' : 'bg-white/50'}`;
+            dot.onclick = () => updateModalImage(i);
+            modalPagination.appendChild(dot);
         });
+    }
 
-        modalNextBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            nextModalImage();
+    function updateModalDots() {
+        const dots = modalPagination.children;
+        Array.from(dots).forEach((dot, i) => {
+            dot.className = i === currentModalIdx 
+                ? 'w-4 h-2 rounded-full bg-orange-500 transition-all duration-300' 
+                : 'w-2 h-2 rounded-full bg-white/50 transition-all duration-300';
         });
+    }
 
-        window.addEventListener('keydown', (e) => {
-            if (!modal.classList.contains('active')) return;
-            if (e.key === 'ArrowLeft') prevModalImage();
-            if (e.key === 'ArrowRight') nextModalImage();
-            if (e.key === 'Escape') closeModal();
-        });
+    function prevModalImage() {
+        let newIdx = currentModalIdx - 1;
+        if (newIdx < 0) newIdx = modalImages.length - 1;
+        updateModalImage(newIdx);
+    }
 
-        function closeModal() {
-            modal.classList.remove('active');
-            setTimeout(() => modal.style.display = 'none', 400);
-            document.body.style.overflow = '';
-        }
+    function nextModalImage() {
+        let newIdx = currentModalIdx + 1;
+        if (newIdx >= modalImages.length) newIdx = 0;
+        updateModalImage(newIdx);
+    }
 
-        document.querySelectorAll('.service-card').forEach(card => {
-            card.addEventListener('click', () => openModal(card));
-        });
+    modalPrevBtn.addEventListener('click', (e) => { e.stopPropagation(); prevModalImage(); });
+    modalNextBtn.addEventListener('click', (e) => { e.stopPropagation(); nextModalImage(); });
 
-        closeModalBtn.addEventListener('click', closeModal);
-        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    window.addEventListener('keydown', (e) => {
+        if (!modal.classList.contains('active')) return;
+        if (e.key === 'ArrowLeft') prevModalImage();
+        if (e.key === 'ArrowRight') nextModalImage();
+        if (e.key === 'Escape') closeModal();
+    });
 
-        // Slider Logic
-        const sliderContainer = document.getElementById('slider-container');
-        const prevButton = document.getElementById('prev-slide');
-        const nextButton = document.getElementById('next-slide');
-        const pagination = document.getElementById('slider-pagination');
-        const slides = sliderContainer.children;
-        let currentSlide = 0;
-        let autoSlideTimer;
+    function closeModal() {
+        modal.classList.remove('active');
+        setTimeout(() => modal.style.display = 'none', 400);
+        document.body.style.overflow = '';
+    }
 
-        function showSlide(index) {
-            if (index < 0) {
-                currentSlide = slides.length - 1;
-            } else if (index >= slides.length) {
-                currentSlide = 0;
+    document.querySelectorAll('.service-card').forEach(card => {
+        card.addEventListener('click', () => openModal(card));
+    });
+
+    closeModalBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+    // Bento Grid Observer
+    const bentoItems = document.querySelectorAll('[data-bento]');
+    const bentoObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('show');
             } else {
-                currentSlide = index;
+                entry.target.classList.remove('show');
             }
-            sliderContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
-            updateDots();
-        }
-
-        // Pagination noktalarını oluştur
-        function createDots() {
-            Array.from(slides).forEach((_, i) => {
-                const dot = document.createElement('button');
-                dot.className = `w-2 h-2 rounded-full bg-white/30 transition-all duration-500 hover:bg-white/60`;
-                dot.onclick = () => {
-                    showSlide(i);
-                    startAutoSlide();
-                };
-                pagination.appendChild(dot);
-            });
-            updateDots();
-        }
-
-        function updateDots() {
-            const dots = pagination.children;
-            Array.from(dots).forEach((dot, i) => {
-                const isActive = i === currentSlide;
-                dot.className = isActive 
-                    ? 'w-8 h-2 rounded-full bg-orange-500 transition-all duration-500' 
-                    : 'w-2 h-2 rounded-full bg-white/30 transition-all duration-500 hover:bg-white/60';
-            });
-        }
-
-        function startAutoSlide() {
-            stopAutoSlide();
-            autoSlideTimer = setInterval(() => {
-                showSlide(currentSlide + 1);
-            }, 5000);
-        }
-
-        function stopAutoSlide() {
-            if (autoSlideTimer) clearInterval(autoSlideTimer);
-        }
-
-        prevButton.addEventListener('click', () => {
-            showSlide(currentSlide - 1);
-            startAutoSlide();
         });
-
-        nextButton.addEventListener('click', () => {
-            showSlide(currentSlide + 1);
-            startAutoSlide();
-        });
-
-        // Mobile Swipe Support for Slider
-        let touchStartX = 0;
-        let touchEndX = 0;
-        
-        sliderContainer.addEventListener('touchstart', e => {
-            touchStartX = e.changedTouches[0].screenX;
-        }, { passive: true });
-
-        sliderContainer.addEventListener('touchend', e => {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        }, { passive: true });
-
-        function handleSwipe() {
-            if (touchStartX - touchEndX > 50) {
-                showSlide(currentSlide + 1); // Swipe Left
-            } else if (touchEndX - touchStartX > 50) {
-                showSlide(currentSlide - 1); // Swipe Right
-            }
-            startAutoSlide();
-        }
-
-        createDots();
-        startAutoSlide();
-
-        // Bento Grid Observer
-        const bentoItems = document.querySelectorAll('[data-bento]');
-        const bentoObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('show');
-                } else {
-                    entry.target.classList.remove('show');
-                }
-            });
-        }, { threshold: 0.1 });
-        bentoItems.forEach(item => bentoObserver.observe(item));
+    }, { threshold: 0.1 });
+    bentoItems.forEach(item => bentoObserver.observe(item));
     </script>
-
 </body>
 </html>
-            
